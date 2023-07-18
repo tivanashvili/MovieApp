@@ -14,14 +14,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
         
-        window = UIWindow(windowScene: windowScene)
+        let viewController = SplashViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
         
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .green
+        window.backgroundColor = .black
+        window.overrideUserInterfaceStyle = .light
+        navigationController.navigationBar.barStyle = .black
         
-        window?.rootViewController = viewController
-        window?.makeKeyAndVisible()
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        self.window = window
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
