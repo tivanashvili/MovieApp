@@ -24,13 +24,12 @@ final class HomeViewController: UIViewController {
         return button
     }()
     
-    private lazy var collectionView: UICollectionView = {
+    private lazy var movieCategoryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.layer.borderWidth = 1
-        view.layer.cornerRadius = 12
-        view.backgroundColor = .black
+        view.isScrollEnabled = true
+        view.backgroundColor = .clear
         view.layer.borderColor = UIColor.white.cgColor
         view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: "MovieCategoryCollectionViewCell")
         view.delegate = self
@@ -62,9 +61,11 @@ final class HomeViewController: UIViewController {
         setupFilterButtonConstraints()
         setupSearchBarConstraints()
         setupCollectionViewConstraints()
+        movieCategoryCollectionView.isHidden = true
+        filterButton.collectionView = movieCategoryCollectionView
     }
     
-    private let categories = ["Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
+    private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
     
     private func setupSearchBarConstraints() {
         view.addSubview(searchBar)
@@ -84,12 +85,12 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupCollectionViewConstraints() {
-        view.addSubview(collectionView)
+        view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            collectionView.heightAnchor.constraint(equalToConstant: 21),
-            collectionView.widthAnchor.constraint(greaterThanOrEqualToConstant: 200)
+            movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            movieCategoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            movieCategoryCollectionView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
 }
@@ -111,6 +112,27 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.configure(with: category)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? MovieCategoryCollectionViewCell else {
+            return
+        }
+        cell.backgroundColor = UIColor(hex: "F5C518")
+        cell.setLabelTextColor(UIColor.black)
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let category = categories[indexPath.row]
+
+        let cell = MovieCategoryCollectionViewCell(frame: CGRect.zero)
+        cell.configure(with: category)
+        cell.cellLabel.preferredMaxLayoutWidth = collectionView.bounds.width - 16
+        let labelSize = cell.cellLabel.intrinsicContentSize
+        let cellWidth = labelSize.width + 16
+        return CGSize(width: cellWidth, height: 26)
     }
 }
 

@@ -14,6 +14,8 @@ protocol FilterButtonDelegate: AnyObject {
 final class FilterButton: UIButton {
     
     weak var delegate: FilterButtonDelegate?
+    var collectionView: UICollectionView?
+    var animateCollectionView = true
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -27,8 +29,11 @@ final class FilterButton: UIButton {
     
     // MARK: Setup
     private func setUp() {
-        setImage(UIImage(named: "Filter"), for: .normal)
-        setImage(UIImage(named: "SelectedFilter"), for: .selected)
+        let normalImage = UIImage(named: "Filter")
+        let selectedImage = UIImage(named: "SelectedFilter")
+        
+        setImage(normalImage, for: .normal)
+        setImage(selectedImage, for: .selected)
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
     }
@@ -36,5 +41,22 @@ final class FilterButton: UIButton {
     @objc private func buttonTapped() {
         isSelected.toggle()
         delegate?.didToggleFilterSection()
+        
+        collectionView?.isHidden = !isSelected
+        
+        if isSelected {
+            let selectedImage = UIImage(named: "selectedFilter")
+            setImage(selectedImage, for: .normal)
+        } else {
+            let normalImage = UIImage(named: "Filter")
+            setImage(normalImage, for: .normal)
+        }
+        
+        if animateCollectionView {
+                 UIView.animate(withDuration: 0.5) {
+                     self.collectionView?.alpha = self.isSelected ? 1.0 : 0.0
+                 }
+             }
     }
 }
+

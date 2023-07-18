@@ -9,10 +9,9 @@ import UIKit
 
 class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
-    private let cellLabel: UILabel = {
+    let cellLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 10)
-        label.text = "Movies"
         label.textColor = .white
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,17 +28,27 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.cornerRadius = 12
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.white.cgColor
+    }
+    
     private func setupCellLabelConstraints() {
         contentView.addSubview(cellLabel)
         NSLayoutConstraint.activate([
             cellLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
             cellLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            cellLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4)
         ])
     }
     
     func configure(with category: String) {
         cellLabel.text = category
+    }
+    
+    func setLabelTextColor(_ color: UIColor) {
+        cellLabel.textColor = color
     }
 }
