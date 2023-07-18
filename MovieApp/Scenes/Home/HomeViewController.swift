@@ -38,32 +38,27 @@ final class HomeViewController: UIViewController {
         return view
     }()
 
-    var label: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.text = "DASDADSADASD"
+        label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 18)
+        label.text = "Movies"
+        label.textColor = UIColor(hex: "F5C518")
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .white
-        return label
-    }()
-    
-    var label1: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 16)
-        label.text = "DASDADSADASD"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         return label
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        movieCategoryCollectionView.isHidden = true
         setupFilterButtonConstraints()
         setupSearchBarConstraints()
         setupCollectionViewConstraints()
-        movieCategoryCollectionView.isHidden = true
-        filterButton.collectionView = movieCategoryCollectionView
+        setupTitleLabelConstraints()
     }
+    
+    private var isFilterSelected = false
+    private var titleLabelTopConstraint: NSLayoutConstraint!
     
     private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
     
@@ -80,7 +75,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(filterButton)
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
@@ -93,11 +88,26 @@ final class HomeViewController: UIViewController {
             movieCategoryCollectionView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
+    
+    private func setupTitleLabelConstraints() {
+        view.addSubview(titleLabel)
+        titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 22)
+        NSLayoutConstraint.activate([
+            titleLabelTopConstraint,
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+        ])
+        if movieCategoryCollectionView.isHidden {
+            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 22).isActive = false
+        }else {
+            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52).isActive = true
+        }
+    }
 }
 
 extension HomeViewController: FilterButtonDelegate {
     func didToggleFilterSection() {
-        
+        isFilterSelected = !isFilterSelected
+        movieCategoryCollectionView.isHidden = !isFilterSelected
     }
 }
 
