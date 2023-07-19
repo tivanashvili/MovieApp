@@ -22,6 +22,7 @@
 		C4478F4A2A6569320096614B /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F492A6569320096614B /* FilterButton.swift */; };
 		C4478F4D2A6572EC0096614B /* MoviesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F4C2A6572EC0096614B /* MoviesCollectionViewCell.swift */; };
 		C4478F4F2A6579C30096614B /* MovieCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F4E2A6579C30096614B /* MovieCategoryCollectionViewCell.swift */; };
+		C4478F522A68004F0096614B /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F512A68004E0096614B /* Movie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		C4478F492A6569320096614B /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		C4478F4C2A6572EC0096614B /* MoviesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesCollectionViewCell.swift; sourceTree = "<group>"; };
 		C4478F4E2A6579C30096614B /* MovieCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		C4478F512A68004E0096614B /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 		C4478F372A6539430096614B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C4478F502A6800390096614B /* Models */,
 				C4478F442A6552110096614B /* Custom+UI */,
 				C4478F392A653AD80096614B /* Extensions */,
 				C4478F382A6539490096614B /* CoreData */,
@@ -188,6 +191,14 @@
 				C4478F4E2A6579C30096614B /* MovieCategoryCollectionViewCell.swift */,
 			);
 			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
+		C4478F502A6800390096614B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C4478F512A68004E0096614B /* Movie.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,6 +275,7 @@
 			files = (
 				C4478F462A6552360096614B /* SearchBar.swift in Sources */,
 				C4478F202A652E310096614B /* HomeViewController.swift in Sources */,
+				C4478F522A68004F0096614B /* Movie.swift in Sources */,
 				C4478F1C2A652E310096614B /* AppDelegate.swift in Sources */,
 				C4478F262A652E310096614B /* MovieApp.xcdatamodeld in Sources */,
 				C4478F4A2A6569320096614B /* FilterButton.swift in Sources */,

@@ -9,6 +9,7 @@ import UIKit
 
 final class HomeViewController: UIViewController {
     
+    // MARK: Components
     private let searchBar: SearchBar = {
         let view = SearchBar()
         view.backgroundColor = Constants.SearchBar.backgroundColor
@@ -30,8 +31,20 @@ final class HomeViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.isScrollEnabled = true
         view.backgroundColor = .clear
-        view.layer.borderColor = UIColor.white.cgColor
         view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: "MovieCategoryCollectionViewCell")
+        view.delegate = self
+        view.dataSource = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var moviesCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.isScrollEnabled = true
+        view.backgroundColor = .clear
+        view.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: "MoviesCollectionViewCell")
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -51,23 +64,40 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         movieCategoryCollectionView.isHidden = true
-        setupFilterButtonConstraints()
-        setupSearchBarConstraints()
-        setupCollectionViewConstraints()
-        setupTitleLabelConstraints()
+        setupViews()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTitleLabelPosition()
+    }
+    
+    // MARK: Properties
     private var isFilterSelected = false
-    private var titleLabelTopConstraint: NSLayoutConstraint!
     
     private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
+    
+    private let movies: [Movie] = [
+        Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
+        Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
+        Movie(poster: "movie3", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+    ]
+    
+    private func setupViews() {
+        setupFilterButtonConstraints()
+        setupSearchBarConstraints()
+        setupMovieCategoryCollectionView()
+        setupTitleLabelConstraints()
+        setupMoviesCollectionView()
+    }
     
     private func setupSearchBarConstraints() {
         view.addSubview(searchBar)
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -8)
+            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -8),
         ])
     }
     
@@ -79,7 +109,7 @@ final class HomeViewController: UIViewController {
         ])
     }
     
-    private func setupCollectionViewConstraints() {
+    private func setupMovieCategoryCollectionView() {
         view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
             movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
@@ -89,21 +119,31 @@ final class HomeViewController: UIViewController {
         ])
     }
     
+    private func setupMoviesCollectionView() {
+        view.addSubview(moviesCollectionView)
+        NSLayoutConstraint.activate([
+            moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
-        titleLabelTopConstraint = titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 22)
-        NSLayoutConstraint.activate([
-            titleLabelTopConstraint,
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-        ])
-        if movieCategoryCollectionView.isHidden {
-            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 22).isActive = false
-        }else {
-            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52).isActive = true
-        }
+        
+        titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+    }
+    
+    private func updateTitleLabelPosition() {
+        titleLabel.frame.origin.y = searchBar.frame.maxY + (movieCategoryCollectionView.isHidden ? 22 : 52)
+        moviesCollectionView.frame.origin.y = titleLabel.frame.maxY + 16
     }
 }
 
+// MARK: - FilterButton Delegate
 extension HomeViewController: FilterButtonDelegate {
     func didToggleFilterSection() {
         isFilterSelected = !isFilterSelected
@@ -111,17 +151,39 @@ extension HomeViewController: FilterButtonDelegate {
     }
 }
 
+// MARK: - CollectionViewDelegate
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categories.count
+        if collectionView == movieCategoryCollectionView {
+            return categories.count
+        } else if collectionView == moviesCollectionView{
+            return movies.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCategoryCollectionViewCell", for: indexPath) as! MovieCategoryCollectionViewCell
-        let category = categories[indexPath.row]
-        cell.configure(with: category)
         
-        return cell
+        if collectionView == self.movieCategoryCollectionView {
+            let movieCategoryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCategoryCollectionViewCell", for: indexPath) as! MovieCategoryCollectionViewCell
+            let category = categories[indexPath.row]
+            
+            movieCategoryCollectionViewCell.configure(with: category)
+            
+            return movieCategoryCollectionViewCell
+            
+        }
+        
+        else if collectionView == self.moviesCollectionView {
+            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
+            
+            let movie = movies[indexPath.row]
+            moviesCollectionViewCell.configure(with: movie)
+            
+            return moviesCollectionViewCell
+        }
+        
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -135,14 +197,19 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let category = categories[indexPath.row]
+        if collectionView == movieCategoryCollectionView {
+            let category = categories[indexPath.row]
 
-        let cell = MovieCategoryCollectionViewCell(frame: CGRect.zero)
-        cell.configure(with: category)
-        cell.cellLabel.preferredMaxLayoutWidth = collectionView.bounds.width - 16
-        let labelSize = cell.cellLabel.intrinsicContentSize
-        let cellWidth = labelSize.width + 16
-        return CGSize(width: cellWidth, height: 26)
+            let cell = MovieCategoryCollectionViewCell(frame: CGRect.zero)
+            cell.configure(with: category)
+            cell.cellLabel.preferredMaxLayoutWidth = collectionView.bounds.width - 16
+            let labelSize = cell.cellLabel.intrinsicContentSize
+            let cellWidth = labelSize.width + 16
+            return CGSize(width: cellWidth, height: 26)
+        }else if collectionView == moviesCollectionView{
+            return CGSize(width: 164, height: 270)
+        }
+        return CGSize()
     }
 }
 
