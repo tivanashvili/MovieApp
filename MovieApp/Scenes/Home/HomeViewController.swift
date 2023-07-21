@@ -97,6 +97,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: Properties
     private var isFilterSelected = false
+    private var selectedIndexPath: IndexPath?
     
     private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
     
@@ -200,6 +201,14 @@ final class HomeViewController: UIViewController {
             favoritesButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12)
         ])
     }
+    
+    private func calculateCellSize(for category: String) -> CGSize {
+        let cellLabel = UILabel()
+        cellLabel.text = category
+        cellLabel.sizeToFit()
+        let cellWidth = cellLabel.frame.width + 16
+        return CGSize(width: cellWidth, height: 26)
+    }
 }
 
 // MARK: - FilterButton Delegate
@@ -249,8 +258,19 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.cellForItem(at: indexPath) as? MovieCategoryCollectionViewCell else {
             return
         }
-        cell.backgroundColor = UIColor(hex: "F5C518")
-        cell.setLabelTextColor(UIColor.black)
+        
+        if indexPath == selectedIndexPath {
+            cell.isSelectedCell = false
+            selectedIndexPath = nil
+        } else {
+            if let selectedIndexPath = selectedIndexPath, let selectedCell = collectionView.cellForItem(at: selectedIndexPath) as? MovieCategoryCollectionViewCell {
+                selectedCell.isSelectedCell = false
+            }
+            
+            cell.isSelectedCell = true
+            selectedIndexPath = indexPath
+        }
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
@@ -258,16 +278,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieCategoryCollectionView {
             let category = categories[indexPath.row]
-
-            let cell = MovieCategoryCollectionViewCell(frame: CGRect.zero)
-            cell.configure(with: category)
-            cell.cellLabel.preferredMaxLayoutWidth = collectionView.bounds.width - 16
-            let labelSize = cell.cellLabel.intrinsicContentSize
-            let cellWidth = labelSize.width + 16
-            return CGSize(width: cellWidth, height: 26)
-        }else if collectionView == moviesCollectionView{
+            let cellSize = calculateCellSize(for: category)
+            return cellSize
+        } else if collectionView == moviesCollectionView {
             return CGSize(width: 164, height: 270)
         }
+        
         return CGSize()
     }
 }

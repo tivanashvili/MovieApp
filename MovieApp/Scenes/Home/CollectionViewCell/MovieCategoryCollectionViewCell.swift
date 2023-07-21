@@ -9,7 +9,7 @@ import UIKit
 
 class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
-    let cellLabel: UILabel = {
+    private let cellLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 10)
         label.textColor = .white
@@ -32,7 +32,26 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         layer.cornerRadius = 12
         layer.borderWidth = 1
-        layer.borderColor = UIColor.white.cgColor
+        layer.borderColor = isSelectedCell ? UIColor.clear.cgColor : UIColor.white.cgColor
+    }
+    
+    var isSelectedCell: Bool = false {
+        didSet {
+            updateAppearance()
+        }
+    }
+    
+    private func updateAppearance() {
+        if isSelectedCell {
+            backgroundColor = UIColor(hex: "F5C518")
+            layer.borderWidth = 0
+            cellLabel.textColor = .black
+        } else {
+            backgroundColor = UIColor.clear
+            layer.borderWidth = 1
+            layer.borderColor = UIColor.white.cgColor
+            cellLabel.textColor = .white
+        }
     }
     
     private func setupCellLabelConstraints() {
@@ -46,9 +65,5 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
     func configure(with category: String) {
         cellLabel.text = category
-    }
-    
-    func setLabelTextColor(_ color: UIColor) {
-        cellLabel.textColor = color
     }
 }
