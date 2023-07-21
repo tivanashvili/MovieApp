@@ -30,8 +30,8 @@ final class SearchBar: UIView {
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupSearchIconConstraints()
         setupSearchTextFieldConstraints()
+        setupSearchIconConstraints()
         setupViewConstraints()
     }
     
@@ -40,7 +40,7 @@ final class SearchBar: UIView {
     }
     
     private func setupSearchIconConstraints() {
-        addSubview(searchIcon)
+        searchTextField.addSubview(searchIcon)
         NSLayoutConstraint.activate([
             searchIcon.topAnchor.constraint(equalTo: topAnchor, constant: Constants.SearchIcon.top),
             searchIcon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.SearchIcon.leading)
@@ -52,7 +52,8 @@ final class SearchBar: UIView {
         NSLayoutConstraint.activate([
             searchTextField.topAnchor.constraint(equalTo: topAnchor, constant: Constants.SearchTextField.top),
             searchTextField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Constants.SearchTextField.bottom),
-            searchTextField.leadingAnchor.constraint(equalTo: searchIcon.trailingAnchor, constant: Constants.SearchTextField.leading)
+            searchTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.SearchTextField.leading),
+            searchTextField.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
     
@@ -72,7 +73,7 @@ private extension SearchBar {
             static let textColor = UIColor(hex: "A5A5A5")
             static let top: CGFloat = 9
             static let bottom: CGFloat = -9
-            static let leading: CGFloat = 6
+            static let leading: CGFloat = 44
         }
         enum SearchIcon {
             static let image = UIImage(named: "searchImage")
