@@ -20,6 +20,7 @@ final class SearchBar: UIView {
         let textField = UITextField()
         textField.font = Constants.SearchTextField.textFont
         textField.placeholder = Constants.SearchTextField.text
+        textField.textColor = .white
         textField.setPlaceholderColor(Constants.SearchTextField.textColor)
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField

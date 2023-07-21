@@ -60,6 +60,29 @@ final class HomeViewController: UIViewController {
         label.backgroundColor = .clear
         return label
     }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    private let homeButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 12
+        button.setImage(UIImage(named: "selectedHome"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let favoritesButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 12
+        button.setImage(UIImage(named: "favoritesButton"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +105,12 @@ final class HomeViewController: UIViewController {
         Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
         Movie(poster: "movie3", name: "The Baby Boss", genre: "Comedy", year: 2017),
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
     
     private func setupViews() {
@@ -90,6 +119,9 @@ final class HomeViewController: UIViewController {
         setupMovieCategoryCollectionView()
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
+        setupContainerViewConstraints()
+        setupHomeButtonConstraints()
+        setupFavoritesButtonConstraints()
     }
     
     private func setupSearchBarConstraints() {
@@ -97,7 +129,7 @@ final class HomeViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -8),
+            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -8)
         ])
     }
     
@@ -128,7 +160,6 @@ final class HomeViewController: UIViewController {
             moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
     
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
@@ -140,6 +171,34 @@ final class HomeViewController: UIViewController {
     private func updateTitleLabelPosition() {
         titleLabel.frame.origin.y = searchBar.frame.maxY + (movieCategoryCollectionView.isHidden ? 22 : 52)
         moviesCollectionView.frame.origin.y = titleLabel.frame.maxY + 16
+    }
+    
+    private func setupContainerViewConstraints() {
+        view.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 70)
+        ])
+    }
+    
+    private func setupHomeButtonConstraints() {
+        containerView.addSubview(homeButton)
+        NSLayoutConstraint.activate([
+            homeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant:  16),
+            homeButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
+            homeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12)
+        ])
+    }
+    
+    private func setupFavoritesButtonConstraints() {
+        containerView.addSubview(favoritesButton)
+        NSLayoutConstraint.activate([
+            favoritesButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant:  -16),
+            favoritesButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
+            favoritesButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12)
+        ])
     }
 }
 
