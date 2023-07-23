@@ -69,21 +69,10 @@ final class HomeViewController: UIViewController {
         return view
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        movieCategoryCollectionView.isHidden = true
-        customNavigationBar.setFavoritesButtonSelected(false)
-        setupViews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateTitleLabelPosition()
-    }
-    
     // MARK: Properties
     private var isFilterSelected = false
     private var selectedIndexPath: IndexPath?
+    private var filteredMovies: [Movie] = []
     
     private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
     
@@ -100,19 +89,30 @@ final class HomeViewController: UIViewController {
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
     
+    // MARK: Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        movieCategoryCollectionView.isHidden = true
+        customNavigationBar.setFavoritesButtonSelected(false)
+        setupViews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTitleLabelPosition()
+    }
+    
+    // MARK: Actions
     private func showFavoritePageViewController() {
-        DispatchQueue.main.async{
+        DispatchQueue.main.async {
             let favoriteVC = FavoritePageViewController()
             let navController = UINavigationController(rootViewController: favoriteVC)
             navController.modalPresentationStyle = .fullScreen
             self.present(navController, animated: true, completion: nil)
         }
-//        moviesCollectionView.isHidden = true
-//        searchBar.isHidden = true
-//        titleLabel.isHidden = true
-//        filterButton.isHidden = true
     }
     
+    // MARK: Methods
     private func setupViews() {
         setupFilterButtonConstraints()
         setupSearchBarConstraints()
@@ -198,6 +198,7 @@ extension HomeViewController: FilterButtonDelegate {
     }
 }
 
+// MARK: - FavoriteButton Delegate
 extension HomeViewController: FavoriteButtonDelegate {
     func didTapFavoritesButton() {
         showFavoritePageViewController()
@@ -209,51 +210,65 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == movieCategoryCollectionView {
             return categories.count
-        } else if collectionView == moviesCollectionView{
-            return movies.count
+        } else if collectionView == moviesCollectionView {
+            if isFilterSelected {
+                return filteredMovies.count
+            } else {
+                return movies.count
+            }
         }
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if collectionView == self.movieCategoryCollectionView {
             let movieCategoryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCategoryCollectionViewCell", for: indexPath) as! MovieCategoryCollectionViewCell
             let category = categories[indexPath.row]
             movieCategoryCollectionViewCell.configure(with: category)
-            
             return movieCategoryCollectionViewCell
-            
-        }
-        else if collectionView == self.moviesCollectionView {
+        } else if collectionView == self.moviesCollectionView {
             let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
-            let movie = movies[indexPath.row]
+            let movie: Movie
+            if isFilterSelected {
+                movie = filteredMovies[indexPath.row]
+            } else {
+                movie = movies[indexPath.row]
+            }
             moviesCollectionViewCell.configure(with: movie)
-            
             return moviesCollectionViewCell
         }
-        
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? MovieCategoryCollectionViewCell else {
-            return
-        }
-        
-        if indexPath == selectedIndexPath {
-            cell.isSelectedCell = false
-            selectedIndexPath = nil
-        } else {
-            if let selectedIndexPath = selectedIndexPath, let selectedCell = collectionView.cellForItem(at: selectedIndexPath) as? MovieCategoryCollectionViewCell {
-                selectedCell.isSelectedCell = false
+            guard let cell = collectionView.cellForItem(at: indexPath) as? MovieCategoryCollectionViewCell else {
+                return
             }
             
-            cell.isSelectedCell = true
-            selectedIndexPath = indexPath
+            if collectionView == movieCategoryCollectionView {
+                if indexPath == selectedIndexPath {
+                    cell.isSelectedCell = false
+                    selectedIndexPath = nil
+                    filteredMovies = movies
+                    
+                    moviesCollectionView.reloadData()
+                } else {
+                    if let selectedIndexPath = selectedIndexPath, let selectedCell = collectionView.cellForItem(at: selectedIndexPath) as? MovieCategoryCollectionViewCell {
+                        selectedCell.isSelectedCell = false
+                    }
+                    
+                    cell.isSelectedCell = true
+                    selectedIndexPath = indexPath
+
+                    let selectedCategory = categories[indexPath.row]
+                    filteredMovies = movies.filter { $0.genre == selectedCategory }
+                    
+                    moviesCollectionView.reloadData()
+                }
+            }
+            
+            collectionView.deselectItem(at: indexPath, animated: true)
         }
-        collectionView.deselectItem(at: indexPath, animated: true)
-    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieCategoryCollectionView {
