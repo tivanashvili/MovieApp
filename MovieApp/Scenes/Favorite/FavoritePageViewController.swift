@@ -10,7 +10,7 @@ import UIKit
 class FavoritePageViewController: UIViewController {
     
     // MARK: Components
-    private let favoriteMoviesLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.FavoriteMoviesLabel.text
         label.font = Constants.FavoriteMoviesLabel.font
@@ -41,6 +41,13 @@ class FavoritePageViewController: UIViewController {
         return view
     }()
     
+    private let emptyFavoritePageImageView: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "noMovies")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     private let movies: [Movie] = [
         Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
         Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
@@ -57,24 +64,29 @@ class FavoritePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFavoriteMoviesLabelConstraints()
-        setupMoviesCollectionViewConstraints()
         setupCustomNavigationBarConstraints()
         customNavigationBar.setFavoritesButtonSelected(true)
+        setupEmptyFavoritePageImageViewConstraints()
+        if movies.count == 0 {
+            setupEmptyFavoritePageImageViewConstraints()
+        }else {
+            setupMoviesCollectionViewConstraints()
+        }
     }
     
-    private func setupFavoriteMoviesLabelConstraints() {
-        view.addSubview(favoriteMoviesLabel)
+    private func setupTitleLabelConstraints() {
+        view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            favoriteMoviesLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            favoriteMoviesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            favoriteMoviesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     private func setupMoviesCollectionViewConstraints() {
         view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
-            moviesCollectionView.topAnchor.constraint(equalTo: favoriteMoviesLabel.bottomAnchor, constant: 8),
+            moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -89,6 +101,14 @@ class FavoritePageViewController: UIViewController {
             customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             customNavigationBar.heightAnchor.constraint(equalToConstant: 70)
         ])
+    }
+    
+    private func setupEmptyFavoritePageImageViewConstraints() {
+        view.addSubview(emptyFavoritePageImageView)
+        NSLayoutConstraint.activate([
+            emptyFavoritePageImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyFavoritePageImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+             ])
     }
 
 }
