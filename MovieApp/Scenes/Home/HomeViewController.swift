@@ -29,6 +29,7 @@ final class HomeViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.showsHorizontalScrollIndicator = false
         view.isScrollEnabled = true
         view.backgroundColor = .clear
         view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: "MovieCategoryCollectionViewCell")
@@ -74,17 +75,17 @@ final class HomeViewController: UIViewController {
     private var selectedIndexPath: IndexPath?
     private var filteredMovies: [Movie] = []
     
-    private let categories = ["Action", "Comedytttttttttt", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
+    private let categories = ["Action", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
     
     private let movies: [Movie] = [
-        Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
-        Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
-        Movie(poster: "movie3", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movie(poster: "movie1", name: "The Baby Boss", genre: "Drama", year: 2017),
+        Movie(poster: "movie2", name: "The Baby Boss", genre: "Thriller", year: 2016),
+        Movie(poster: "movie3", name: "The Baby Boss", genre: "Action", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Thriller", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Thriller", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Action", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Action", year: 2017),
+        Movie(poster: "movie4", name: "The Baby Boss", genre: "Drama", year: 2017),
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
