@@ -7,13 +7,20 @@
 
 import UIKit
 
+protocol FavoriteButtonDelegate: AnyObject {
+    func didTapFavoritesButton()
+}
+
+protocol HomeButtonDelegate: AnyObject {
+    func didTapHomeButtonInFavorites()
+}
+
 final class CustomNavigationBar: UIView {
     
     // MARK: Components
     private let homeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 12
-        button.setImage(UIImage(named: "selectedHome"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -21,20 +28,56 @@ final class CustomNavigationBar: UIView {
     private let favoritesButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 12
-        button.setImage(UIImage(named: "favoritesButton"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
+    weak var favoriteButtonDelegate: FavoriteButtonDelegate?
+    weak var homeButtonDelegate: HomeButtonDelegate?
+
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupHomeButtonConstraints()
         setupFavoritesButtonConstraints()
+        setupFavoriteButton()
+        setupHomeButton()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Setup
+    private func setupFavoriteButton() {
+        let normalImage = UIImage(named: "favoritesButton")
+        let selectedImage = UIImage(named: "selectedFavorites")
+        
+        favoritesButton.setImage(normalImage, for: .normal)
+        favoritesButton.setImage(selectedImage, for: .selected)
+        favoritesButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupHomeButton() {
+        let normalImage = UIImage(named: "homeButton")
+        let selectedImage = UIImage(named: "selectedHome")
+        
+        homeButton.setImage(normalImage, for: .normal)
+        homeButton.setImage(selectedImage, for: .selected)
+        homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func favoritesButtonTapped(_ sender: UIButton) {
+        favoriteButtonDelegate?.didTapFavoritesButton()
+    }
+    
+    @objc private func homeButtonTapped(_ sender: UIButton) {
+        homeButtonDelegate?.didTapHomeButtonInFavorites()
+    }
+    
+    func setFavoritesButtonSelected(_ isSelected: Bool) {
+        favoritesButton.isSelected = isSelected
+        homeButton.isSelected = !isSelected
     }
     
     private func setupHomeButtonConstraints() {

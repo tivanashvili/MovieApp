@@ -21,8 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window.backgroundColor = .black
         window.overrideUserInterfaceStyle = .light
-        navigationController.navigationBar.barStyle = .black
-        
+        UINavigationBar.appearance().barStyle = .black
+
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         self.window = window

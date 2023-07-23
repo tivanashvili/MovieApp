@@ -61,8 +61,9 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
-    private let customNavigationBar: CustomNavigationBar = {
+    private lazy var customNavigationBar: CustomNavigationBar = {
         let view = CustomNavigationBar()
+        view.favoriteButtonDelegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black
         return view
@@ -71,6 +72,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         movieCategoryCollectionView.isHidden = true
+        customNavigationBar.setFavoritesButtonSelected(false)
         setupViews()
     }
     
@@ -98,13 +100,26 @@ final class HomeViewController: UIViewController {
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
     
+    private func showFavoritePageViewController() {
+        DispatchQueue.main.async{
+            let favoriteVC = FavoritePageViewController()
+            let navController = UINavigationController(rootViewController: favoriteVC)
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true, completion: nil)
+        }
+//        moviesCollectionView.isHidden = true
+//        searchBar.isHidden = true
+//        titleLabel.isHidden = true
+//        filterButton.isHidden = true
+    }
+    
     private func setupViews() {
         setupFilterButtonConstraints()
         setupSearchBarConstraints()
         setupMovieCategoryCollectionView()
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
-        setupContainerViewConstraints()
+        setupCustomNavigationBarConstraints()
     }
     
     private func setupSearchBarConstraints() {
@@ -156,7 +171,7 @@ final class HomeViewController: UIViewController {
         moviesCollectionView.frame.origin.y = titleLabel.frame.maxY + 16
     }
     
-    private func setupContainerViewConstraints() {
+    private func setupCustomNavigationBarConstraints() {
         view.addSubview(customNavigationBar)
         NSLayoutConstraint.activate([
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -180,6 +195,12 @@ extension HomeViewController: FilterButtonDelegate {
     func didToggleFilterSection() {
         isFilterSelected = !isFilterSelected
         movieCategoryCollectionView.isHidden = !isFilterSelected
+    }
+}
+
+extension HomeViewController: FavoriteButtonDelegate {
+    func didTapFavoritesButton() {
+        showFavoritePageViewController()
     }
 }
 

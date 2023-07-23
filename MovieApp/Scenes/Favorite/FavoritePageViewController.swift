@@ -13,6 +13,9 @@ class FavoritePageViewController: UIViewController {
     private let favoriteMoviesLabel: UILabel = {
         let label = UILabel()
         label.text = Constants.FavoriteMoviesLabel.text
+        label.font = Constants.FavoriteMoviesLabel.font
+        label.textAlignment = .center
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -27,6 +30,14 @@ class FavoritePageViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var customNavigationBar: CustomNavigationBar = {
+        let view = CustomNavigationBar()
+        view.homeButtonDelegate = self
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .black
         return view
     }()
     
@@ -46,22 +57,37 @@ class FavoritePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFavoriteMoviesLabelConstraints()
+        setupMoviesCollectionViewConstraints()
+        setupCustomNavigationBarConstraints()
+        customNavigationBar.setFavoritesButtonSelected(true)
     }
     
     private func setupFavoriteMoviesLabelConstraints() {
         view.addSubview(favoriteMoviesLabel)
         NSLayoutConstraint.activate([
-            favoriteMoviesLabel.topAnchor.constraint(equalTo: view.topAnchor),
-            favoriteMoviesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            favoriteMoviesLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            favoriteMoviesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            favoriteMoviesLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     private func setupMoviesCollectionViewConstraints() {
         view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
-            moviesCollectionView.topAnchor.constraint(equalTo: favoriteMoviesLabel.bottomAnchor),
-            moviesCollectionView.topAnchor.constraint(equalTo: favoriteMoviesLabel.bottomAnchor),
-
+            moviesCollectionView.topAnchor.constraint(equalTo: favoriteMoviesLabel.bottomAnchor, constant: 8),
+            moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func setupCustomNavigationBarConstraints() {
+        view.addSubview(customNavigationBar)
+        NSLayoutConstraint.activate([
+            customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            customNavigationBar.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
 
@@ -87,10 +113,17 @@ extension FavoritePageViewController: UICollectionViewDelegate, UICollectionView
     }
 }
 
+extension FavoritePageViewController: HomeButtonDelegate {
+    func didTapHomeButtonInFavorites() {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
 private extension FavoritePageViewController {
     enum Constants {
         enum FavoriteMoviesLabel {
             static let text = "Favorite Movies"
+            static let font = UIFont.boldSystemFont(ofSize: 18)
         }
     }
 }

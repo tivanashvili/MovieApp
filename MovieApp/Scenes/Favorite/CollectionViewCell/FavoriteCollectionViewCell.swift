@@ -18,7 +18,7 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
     
     private let favouriteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Favorite"), for: .normal)
+        button.setImage(UIImage(named: "selectedFavorite"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
