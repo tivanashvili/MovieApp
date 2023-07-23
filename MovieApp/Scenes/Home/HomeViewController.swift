@@ -61,29 +61,13 @@ final class HomeViewController: UIViewController {
         return label
     }()
     
-    private let containerView: UIView = {
-        let view = UIView()
+    private let customNavigationBar: CustomNavigationBar = {
+        let view = CustomNavigationBar()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black
         return view
     }()
     
-    private let homeButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 12
-        button.setImage(UIImage(named: "selectedHome"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let favoritesButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 12
-        button.setImage(UIImage(named: "favoritesButton"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         movieCategoryCollectionView.isHidden = true
@@ -121,8 +105,6 @@ final class HomeViewController: UIViewController {
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
         setupContainerViewConstraints()
-        setupHomeButtonConstraints()
-        setupFavoritesButtonConstraints()
     }
     
     private func setupSearchBarConstraints() {
@@ -175,30 +157,12 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupContainerViewConstraints() {
-        view.addSubview(containerView)
+        view.addSubview(customNavigationBar)
         NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 70)
-        ])
-    }
-    
-    private func setupHomeButtonConstraints() {
-        containerView.addSubview(homeButton)
-        NSLayoutConstraint.activate([
-            homeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant:  16),
-            homeButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
-            homeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12)
-        ])
-    }
-    
-    private func setupFavoritesButtonConstraints() {
-        containerView.addSubview(favoritesButton)
-        NSLayoutConstraint.activate([
-            favoritesButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant:  -16),
-            favoritesButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -12),
-            favoritesButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12)
+            customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            customNavigationBar.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
     
@@ -220,7 +184,7 @@ extension HomeViewController: FilterButtonDelegate {
 }
 
 // MARK: - CollectionViewDelegate
-extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == movieCategoryCollectionView {
             return categories.count
@@ -235,16 +199,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == self.movieCategoryCollectionView {
             let movieCategoryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCategoryCollectionViewCell", for: indexPath) as! MovieCategoryCollectionViewCell
             let category = categories[indexPath.row]
-            
             movieCategoryCollectionViewCell.configure(with: category)
             
             return movieCategoryCollectionViewCell
             
         }
-        
         else if collectionView == self.moviesCollectionView {
             let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
-            
             let movie = movies[indexPath.row]
             moviesCollectionViewCell.configure(with: movie)
             
@@ -272,9 +233,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         collectionView.deselectItem(at: indexPath, animated: true)
     }
-}
-
-extension HomeViewController: UICollectionViewDelegateFlowLayout{
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieCategoryCollectionView {
             let category = categories[indexPath.row]
