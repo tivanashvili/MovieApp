@@ -63,10 +63,9 @@ class FavoritePageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupFavoriteMoviesLabelConstraints()
+        setupTitleLabelConstraints()
         setupCustomNavigationBarConstraints()
         customNavigationBar.setFavoritesButtonSelected(true)
-        setupEmptyFavoritePageImageViewConstraints()
         if movies.count == 0 {
             setupEmptyFavoritePageImageViewConstraints()
         }else {
