@@ -51,7 +51,7 @@ final class HomeViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 18)
@@ -242,34 +242,43 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if collectionView == movieCategoryCollectionView {
             guard let cell = collectionView.cellForItem(at: indexPath) as? MovieCategoryCollectionViewCell else {
                 return
             }
-            
-            if collectionView == movieCategoryCollectionView {
-                if indexPath == selectedIndexPath {
-                    cell.isSelectedCell = false
-                    selectedIndexPath = nil
-                    filteredMovies = movies
-                    
-                    moviesCollectionView.reloadData()
-                } else {
-                    if let selectedIndexPath = selectedIndexPath, let selectedCell = collectionView.cellForItem(at: selectedIndexPath) as? MovieCategoryCollectionViewCell {
-                        selectedCell.isSelectedCell = false
-                    }
-                    
-                    cell.isSelectedCell = true
-                    selectedIndexPath = indexPath
-
-                    let selectedCategory = categories[indexPath.row]
-                    filteredMovies = movies.filter { $0.genre == selectedCategory }
-                    
-                    moviesCollectionView.reloadData()
+            if indexPath == selectedIndexPath {
+                cell.isSelectedCell = false
+                selectedIndexPath = nil
+                filteredMovies = movies
+                
+                moviesCollectionView.reloadData()
+            } else {
+                if let selectedIndexPath = selectedIndexPath, let selectedCell = collectionView.cellForItem(at: selectedIndexPath) as? MovieCategoryCollectionViewCell {
+                    selectedCell.isSelectedCell = false
                 }
+                
+                cell.isSelectedCell = true
+                selectedIndexPath = indexPath
+                
+                let selectedCategory = categories[indexPath.row]
+                filteredMovies = movies.filter { $0.genre == selectedCategory }
+                
+                moviesCollectionView.reloadData()
             }
-            
-            collectionView.deselectItem(at: indexPath, animated: true)
         }
+        
+        if collectionView == moviesCollectionView {
+            guard collectionView.cellForItem(at: indexPath) is MoviesCollectionViewCell else {
+                return
+            }
+            let vc = MovieDetailsViewController()
+            let navController = UINavigationController(rootViewController: vc)
+            navController.modalPresentationStyle = .fullScreen
+            self.present(navController, animated: true, completion: nil)
+        }
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieCategoryCollectionView {
