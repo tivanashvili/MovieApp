@@ -48,6 +48,9 @@ class FavoritePageViewController: UIViewController {
         return image
     }()
     
+    // MARK: Properties
+    var isFavoriteButtonSelected = false
+    
     private let movies: [Movie] = [
         Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
         Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
@@ -60,7 +63,7 @@ class FavoritePageViewController: UIViewController {
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitleLabelConstraints()
@@ -73,6 +76,7 @@ class FavoritePageViewController: UIViewController {
         setupCustomNavigationBarConstraints()
     }
     
+    // MARK: Setup Views
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
@@ -107,9 +111,15 @@ class FavoritePageViewController: UIViewController {
         NSLayoutConstraint.activate([
             emptyFavoritePageImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyFavoritePageImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-             ])
+        ])
     }
+}
 
+// MARK - MovieDetailsViewControllerDelegate
+extension FavoritePageViewController: MovieDetailsViewControllerDelegate {
+    func didTapBackButton() {
+        dismiss(animated: true,completion: nil)
+    }
 }
 
 // MARK: - CollectionViewDelegate
@@ -129,6 +139,17 @@ extension FavoritePageViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 164, height: 270)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard collectionView.cellForItem(at: indexPath) is FavoriteCollectionViewCell else {
+            return
+        }
+        let vc = MovieDetailsViewController()
+        vc.delegate = self
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        self.present(navController, animated: true, completion: nil)
     }
 }
 

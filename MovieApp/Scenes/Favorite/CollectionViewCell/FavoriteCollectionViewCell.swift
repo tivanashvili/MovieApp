@@ -58,6 +58,8 @@ class FavoriteCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    // MARK: Properties
+    
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol MovieDetailsViewControllerDelegate: AnyObject {
+    func didTapBackButton()
+}
+
 class MovieDetailsViewController: UIViewController {
     
     // MARK: Components
@@ -125,6 +129,9 @@ class MovieDetailsViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
+    
+    // MARK: Properties
+    weak var delegate: MovieDetailsViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,6 +139,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func setupViews() {
+        setupBackButtonConstraints()
         setupTitleLabelConstraints()
         setupMoviePosterConstraints()
         setupMovieNameLabelConstraints()
@@ -139,18 +147,34 @@ class MovieDetailsViewController: UIViewController {
         setupAboutMovieLabelConstraints()
         setupScrollViewConstraints()
         setupMovieDescriptionLabelConstraint()
-        setupBackButtonConstraints()
         setupTrailerButtonConstraints()
         setupFavoriteButtonConstraints()
+    }
+    
+    @objc private func backButtonTapped() {
+        delegate?.didTapBackButton()
+    }
+    
+    // MARK: Setup Views
+    private func setupBackButtonConstraints() {
+        view.addSubview(backButton)
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 22),
+            backButton.heightAnchor.constraint(equalToConstant: 20),
+            backButton.widthAnchor.constraint(equalToConstant: 12)
+        ])
     }
     
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -10),
+            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40)
+            titleLabel.heightAnchor.constraint(equalToConstant: 40),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -160,7 +184,7 @@ class MovieDetailsViewController: UIViewController {
             moviePoster.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             moviePoster.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             moviePoster.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            moviePoster.heightAnchor.constraint(equalToConstant: 360)
+            moviePoster.heightAnchor.constraint(equalToConstant: 380)
         ])
     }
     
@@ -223,16 +247,6 @@ class MovieDetailsViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.topAnchor.constraint(equalTo: aboutMovieLabel.bottomAnchor, constant: 8)
-        ])
-    }
-    
-    private func setupBackButtonConstraints() {
-        titleLabel.addSubview(backButton)
-        NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            backButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: 23),
-            backButton.heightAnchor.constraint(equalToConstant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: 12)
         ])
     }
     

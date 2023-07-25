@@ -113,6 +113,10 @@ final class HomeViewController: UIViewController {
         }
     }
     
+    private func showMovieDetailsViewController() {
+        dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: Methods
     private func setupViews() {
         setupFilterButtonConstraints()
@@ -206,6 +210,13 @@ extension HomeViewController: FavoriteButtonDelegate {
     }
 }
 
+// MARK - MovieDetailsViewControllerDelegate
+extension HomeViewController: MovieDetailsViewControllerDelegate {
+    func didTapBackButton() {
+        dismiss(animated: true,completion: nil)
+    }
+}
+
 // MARK: - CollectionViewDelegate
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -273,6 +284,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return
             }
             let vc = MovieDetailsViewController()
+            vc.delegate = self
             let navController = UINavigationController(rootViewController: vc)
             navController.modalPresentationStyle = .fullScreen
             self.present(navController, animated: true, completion: nil)
