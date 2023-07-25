@@ -210,7 +210,7 @@ extension HomeViewController: FavoriteButtonDelegate {
     }
 }
 
-// MARK - MovieDetailsViewControllerDelegate
+// MARK: - MovieDetailsViewControllerDelegate
 extension HomeViewController: MovieDetailsViewControllerDelegate {
     func didTapBackButton() {
         dismiss(animated: true,completion: nil)
