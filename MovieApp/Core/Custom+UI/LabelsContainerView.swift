@@ -24,16 +24,15 @@ class LabelsContainerView: UIView {
         return imageView
     }()
 
-    init() {
+    override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
         layer.cornerRadius = 12
         backgroundColor = UIColor(hex: "1C1C1C")
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupView()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     var labelText: String? {

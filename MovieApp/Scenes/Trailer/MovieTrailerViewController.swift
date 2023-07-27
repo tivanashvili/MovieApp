@@ -16,6 +16,13 @@ class MovieTrailerViewController: UIViewController {
     private var isPlaying = false
 
     // MARK: UI Components
+    private let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "x"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let videoPlayerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 12
@@ -60,7 +67,7 @@ class MovieTrailerViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -78,9 +85,12 @@ class MovieTrailerViewController: UIViewController {
         setupPlusButtonConstraints()
         setupSliderConstraints()
         setupPlayPauseButtonConstraints()
+        setupBackButtonConstraints()
+        setupButtonActions()
     }
     
     private func setupButtonActions() {
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
         minusButton.addTarget(self, action: #selector(minusButtonTapped), for: .touchUpInside)
         plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
@@ -130,6 +140,14 @@ class MovieTrailerViewController: UIViewController {
             plusButton.topAnchor.constraint(equalTo: videoPlayerView.bottomAnchor, constant: 20)
         ])
     }
+    
+    private func setupBackButtonConstraints() {
+        view.addSubview(backButton)
+        NSLayoutConstraint.activate([
+            backButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34)
+        ])
+    }
 
     // MARK: Player Setup
     private func setupPlayer() {
@@ -139,6 +157,7 @@ class MovieTrailerViewController: UIViewController {
         let playerLayer = AVPlayerLayer(player: avPlayer)
         playerLayer.frame = videoPlayerView.bounds
         videoPlayerView.layer.addSublayer(playerLayer)
+        playerLayer.videoGravity = .resizeAspectFill
     }
 
     @objc private func playPauseButtonTapped() {
@@ -163,6 +182,11 @@ class MovieTrailerViewController: UIViewController {
     @objc private func sliderValueChanged() {
         let time = CMTime(seconds: Double(slider.value), preferredTimescale: 1)
         seek(to: time)
+    }
+    
+    @objc private func backButtonTapped() {
+        print("Back button tapped")
+        dismiss(animated: true, completion: nil)
     }
 
     // MARK: Helper method to handle seeking

@@ -36,6 +36,7 @@ class MovieDetailsViewController: UIViewController {
         image.contentMode = .scaleToFill
         image.image = UIImage(named: "movie3")
         image.backgroundColor = .black
+        image.isUserInteractionEnabled = true
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -252,10 +253,22 @@ class MovieDetailsViewController: UIViewController {
     
     private func setupTrailerButtonConstraints() {
         moviePoster.addSubview(trailerButton)
+        trailerButton.addTarget(self, action: #selector(trailerButtonTapped), for: .touchUpInside)
         NSLayoutConstraint.activate([
             trailerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trailerButton.bottomAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: -20)
         ])
+    }
+    
+    @objc func trailerButtonTapped() {
+        guard let videoURL = Bundle.main.url(forResource: "video123", withExtension: "mp4") else {
+            print("Video file not found.")
+            return
+        }
+        let vc = MovieTrailerViewController(videoURL: videoURL)
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        self.present(navController, animated: true, completion: nil)
     }
 }
 

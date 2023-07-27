@@ -148,7 +148,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
             movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
-            movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             movieCategoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             movieCategoryCollectionView.heightAnchor.constraint(equalToConstant: 30)
         ])
