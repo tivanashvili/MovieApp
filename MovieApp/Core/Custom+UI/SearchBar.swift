@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol SearchBarDelegate: AnyObject {
+    func textFieldStartTyping()
+}
+
 final class SearchBar: UIView {
     
     private let searchIcon: UIImageView = {
@@ -16,16 +20,18 @@ final class SearchBar: UIView {
         return image
     }()
     
-    private let searchTextField: UITextField = {
+    private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.font = Constants.SearchTextField.textFont
         textField.placeholder = Constants.SearchTextField.text
         textField.textColor = .white
+        textField.delegate = self
         textField.setPlaceholderColor(Constants.SearchTextField.textColor)
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
+    weak var delegate: SearchBarDelegate?
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -63,6 +69,12 @@ final class SearchBar: UIView {
             widthAnchor.constraint(equalToConstant: 299)
         ])
     }    
+}
+
+extension SearchBar: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.textFieldStartTyping()
+    }
 }
 
 private extension SearchBar {

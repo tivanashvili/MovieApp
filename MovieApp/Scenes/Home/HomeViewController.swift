@@ -10,10 +10,11 @@ import UIKit
 final class HomeViewController: UIViewController {
     
     // MARK: Components
-    private let searchBar: SearchBar = {
+    private lazy var searchBar: SearchBar = {
         let view = SearchBar()
         view.backgroundColor = Constants.SearchBar.backgroundColor
         view.layer.cornerRadius = 16
+        view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -21,6 +22,14 @@ final class HomeViewController: UIViewController {
     private lazy var filterButton: FilterButton = {
         let button = FilterButton()
         button.delegate = self
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let cancelButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Cancel", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -94,8 +103,10 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         movieCategoryCollectionView.isHidden = true
+        cancelButton.isHidden = true
         customNavigationBar.setFavoritesButtonSelected(false)
         setupViews()
+        addTapGestureRecognizer()
     }
     
     override func viewDidLayoutSubviews() {
@@ -121,10 +132,21 @@ final class HomeViewController: UIViewController {
     private func setupViews() {
         setupSearchBarConstraints()
         setupFilterButtonConstraints()
+        setupCancelButtonConstraints()
         setupMovieCategoryCollectionView()
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
         setupCustomNavigationBarConstraints()
+    }
+    
+    private func addTapGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     private func setupSearchBarConstraints() {
@@ -143,6 +165,22 @@ final class HomeViewController: UIViewController {
             filterButton.widthAnchor.constraint(equalToConstant: 36),
             filterButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8)
         ])
+    }
+    
+    private func setupCancelButtonConstraints() {
+        view.addSubview(cancelButton)
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 4),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -13),
+            cancelButton.widthAnchor.constraint(equalToConstant: 36),
+            cancelButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8)
+        ])
+    }
+    
+    @objc private func cancelButtonTapped() {
+        filterButton.isHidden = false
+        cancelButton.isHidden = true
     }
     
     private func setupMovieCategoryCollectionView() {
@@ -216,6 +254,14 @@ extension HomeViewController: FavoriteButtonDelegate {
 extension HomeViewController: MovieDetailsViewControllerDelegate {
     func didTapBackButton() {
         dismiss(animated: true,completion: nil)
+    }
+}
+
+// MARK: - SearchBarDelegate
+extension HomeViewController: SearchBarDelegate {
+    func textFieldStartTyping() {
+        filterButton.isHidden = true
+        cancelButton.isHidden = false
     }
 }
 
