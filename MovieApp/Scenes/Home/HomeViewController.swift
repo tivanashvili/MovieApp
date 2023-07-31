@@ -79,6 +79,12 @@ final class HomeViewController: UIViewController {
         return view
     }()
     
+    private let errorView: ErrorView = {
+        let view = ErrorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     // MARK: Properties
     private var isFilterSelected = false
     private var selectedIndexPath: IndexPath?
@@ -104,6 +110,7 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         movieCategoryCollectionView.isHidden = true
         cancelButton.isHidden = true
+        errorView.isHidden = true
         customNavigationBar.setFavoritesButtonSelected(false)
         setupViews()
         addTapGestureRecognizer()
@@ -142,6 +149,7 @@ final class HomeViewController: UIViewController {
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
         setupCustomNavigationBarConstraints()
+        setupErrorViewConstraints()
     }
     
     private func addTapGestureRecognizer() {
@@ -223,6 +231,16 @@ final class HomeViewController: UIViewController {
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             customNavigationBar.heightAnchor.constraint(equalToConstant: Constants.CustomNavigationBar.height)
+        ])
+    }
+    
+    private func setupErrorViewConstraints() {
+        view.addSubview(errorView)
+        NSLayoutConstraint.activate([
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            errorView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            errorView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
     }
     
