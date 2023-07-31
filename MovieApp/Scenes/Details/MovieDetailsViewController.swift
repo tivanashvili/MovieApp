@@ -193,7 +193,9 @@ class MovieDetailsViewController: UIViewController {
         view.addSubview(favoriteButton)
         NSLayoutConstraint.activate([
             favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            favoriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: 26)
+            favoriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: 26),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 22),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 26)
         ])
     }
     
