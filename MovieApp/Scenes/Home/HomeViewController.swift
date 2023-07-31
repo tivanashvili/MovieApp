@@ -13,7 +13,7 @@ final class HomeViewController: UIViewController {
     private lazy var searchBar: SearchBar = {
         let view = SearchBar()
         view.backgroundColor = Constants.SearchBar.backgroundColor
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.SearchBar.cornerRadius
         view.delegate = self
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -28,8 +28,8 @@ final class HomeViewController: UIViewController {
     
     private let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Cancel", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        button.setTitle(Constants.CancelButton.title, for: .normal)
+        button.titleLabel?.font = Constants.CancelButton.fontsize
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -41,7 +41,7 @@ final class HomeViewController: UIViewController {
         view.showsHorizontalScrollIndicator = false
         view.isScrollEnabled = true
         view.backgroundColor = .clear
-        view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: "MovieCategoryCollectionViewCell")
+        view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: Constants.MovieCategoryCollectionView.reuseIdentifier)
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -54,7 +54,7 @@ final class HomeViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.isScrollEnabled = true
         view.backgroundColor = .clear
-        view.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: "MoviesCollectionViewCell")
+        view.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier)
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -63,9 +63,9 @@ final class HomeViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 18)
-        label.text = "Movies"
-        label.textColor = UIColor(hex: "F5C518")
+        label.font = Constants.TitleLabel.font
+        label.text = Constants.TitleLabel.text
+        label.textColor = Constants.TitleLabel.color
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         return label
@@ -114,6 +114,11 @@ final class HomeViewController: UIViewController {
         updateTitleLabelPosition()
     }
     
+    @objc private func cancelButtonTapped() {
+        filterButton.isHidden = false
+        cancelButton.isHidden = true
+    }
+    
     // MARK: Actions
     private func showFavoritePageViewController() {
         DispatchQueue.main.async {
@@ -128,7 +133,7 @@ final class HomeViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    // MARK: Methods
+    // MARK: Setup
     private func setupViews() {
         setupSearchBarConstraints()
         setupFilterButtonConstraints()
@@ -153,7 +158,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(searchBar)
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.SearchBar.leading)
         ])
     }
     
@@ -161,9 +166,9 @@ final class HomeViewController: UIViewController {
         view.addSubview(filterButton)
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            filterButton.widthAnchor.constraint(equalToConstant: 36),
-            filterButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8)
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.FilterButton.trailing),
+            filterButton.widthAnchor.constraint(equalToConstant: Constants.FilterButton.width),
+            filterButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: Constants.FilterButton.leading)
         ])
     }
     
@@ -171,25 +176,20 @@ final class HomeViewController: UIViewController {
         view.addSubview(cancelButton)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         NSLayoutConstraint.activate([
-            cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 4),
-            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -13),
-            cancelButton.widthAnchor.constraint(equalToConstant: 36),
-            cancelButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8)
+            cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.CancelButton.top),
+            cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.CancelButton.trailing),
+            cancelButton.widthAnchor.constraint(equalToConstant: Constants.CancelButton.width),
+            cancelButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: Constants.CancelButton.leading)
         ])
     }
-    
-    @objc private func cancelButtonTapped() {
-        filterButton.isHidden = false
-        cancelButton.isHidden = true
-    }
-    
+
     private func setupMovieCategoryCollectionView() {
         view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
-            movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
-            movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.MovieCategoryCollectionView.top),
+            movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.MovieCategoryCollectionView.leading),
             movieCategoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            movieCategoryCollectionView.heightAnchor.constraint(equalToConstant: 30)
+            movieCategoryCollectionView.heightAnchor.constraint(equalToConstant: Constants.MovieCategoryCollectionView.height)
         ])
     }
     
@@ -197,8 +197,8 @@ final class HomeViewController: UIViewController {
         view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
             moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            moviesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moviesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.MoviesCollectionView.leading),
+            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.MoviesCollectionView.trailing),
             moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
@@ -206,14 +206,14 @@ final class HomeViewController: UIViewController {
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52),
-            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.TitleLabel.top),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.TitleLabel.leading)
         ])
     }
     
     private func updateTitleLabelPosition() {
-        titleLabel.frame.origin.y = searchBar.frame.maxY + (movieCategoryCollectionView.isHidden ? 22 : 52)
-        moviesCollectionView.frame.origin.y = titleLabel.frame.maxY + 16
+        titleLabel.frame.origin.y = searchBar.frame.maxY + (movieCategoryCollectionView.isHidden ? Constants.TitleLabel.hiddenCollectionView : Constants.TitleLabel.visibleCollectionView)
+        moviesCollectionView.frame.origin.y = titleLabel.frame.maxY + Constants.MoviesCollectionView.maxY
     }
     
     private func setupCustomNavigationBarConstraints() {
@@ -222,7 +222,7 @@ final class HomeViewController: UIViewController {
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            customNavigationBar.heightAnchor.constraint(equalToConstant: 70)
+            customNavigationBar.heightAnchor.constraint(equalToConstant: Constants.CustomNavigationBar.height)
         ])
     }
     
@@ -230,8 +230,8 @@ final class HomeViewController: UIViewController {
         let cellLabel = UILabel()
         cellLabel.text = category
         cellLabel.sizeToFit()
-        let cellWidth = cellLabel.frame.width + 16
-        return CGSize(width: cellWidth, height: 26)
+        let cellWidth = cellLabel.frame.width + Constants.MovieCategoryCollectionView.cellWidth
+        return CGSize(width: cellWidth, height: Constants.MovieCategoryCollectionView.cellHeight)
     }
 }
 
@@ -346,7 +346,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let cellSize = calculateCellSize(for: category)
             return cellSize
         } else if collectionView == moviesCollectionView {
-            return CGSize(width: 164, height: 270)
+            return CGSize(width: Constants.MoviesCollectionView.cellWidth, height: Constants.MoviesCollectionView.cellHeight)
         }
         
         return CGSize()
@@ -357,6 +357,55 @@ private extension HomeViewController {
     enum Constants {
         enum SearchBar {
             static let backgroundColor = UIColor(hex: "1C1C1C")
+            static let cornerRadius: CGFloat = 16
+            static let leading: CGFloat = 16
+        }
+        
+        enum FilterButton {
+            static let leading: CGFloat = 8
+            static let width: CGFloat = 36
+            static let trailing: CGFloat = -16
+        }
+        
+        enum CancelButton {
+            static let fontsize = UIFont.systemFont(ofSize: 12)
+            static let title = "Cancel"
+            static let leading: CGFloat = 8
+            static let trailing: CGFloat = -13
+            static let width: CGFloat = 36
+            static let top: CGFloat = 4
+        }
+        
+        enum MovieCategoryCollectionView {
+            static let reuseIdentifier = "MovieCategoryCollectionViewCell"
+            static let top: CGFloat = 8
+            static let leading: CGFloat = 16
+            static let height: CGFloat = 30
+            static let cellWidth: CGFloat = 16
+            static let cellHeight: CGFloat = 26
+        }
+        
+        enum MoviesCollectionView {
+            static let reuseIdentifier = "MoviesCollectionViewCell"
+            static let leading: CGFloat = 16
+            static let trailing: CGFloat = -16
+            static let maxY: CGFloat = 16
+            static let cellWidth: CGFloat = 164
+            static let cellHeight: CGFloat = 270
+        }
+        
+        enum TitleLabel {
+            static let color = UIColor(hex: "F5C518")
+            static let text = "Movies"
+            static let font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 18)
+            static let top: CGFloat = 52
+            static let leading: CGFloat = 16
+            static let visibleCollectionView: CGFloat = 52
+            static let hiddenCollectionView: CGFloat = 22
+        }
+        
+        enum CustomNavigationBar {
+            static let height: CGFloat = 70
         }
     }
 }
