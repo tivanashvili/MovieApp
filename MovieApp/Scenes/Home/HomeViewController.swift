@@ -119,8 +119,8 @@ final class HomeViewController: UIViewController {
     
     // MARK: Methods
     private func setupViews() {
-        setupFilterButtonConstraints()
         setupSearchBarConstraints()
+        setupFilterButtonConstraints()
         setupMovieCategoryCollectionView()
         setupTitleLabelConstraints()
         setupMoviesCollectionView()
@@ -131,8 +131,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(searchBar)
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchBar.trailingAnchor.constraint(equalTo: filterButton.leadingAnchor, constant: -8)
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
     }
     
@@ -140,7 +139,9 @@ final class HomeViewController: UIViewController {
         view.addSubview(filterButton)
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            filterButton.widthAnchor.constraint(equalToConstant: 36),
+            filterButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8)
         ])
     }
     
@@ -158,7 +159,7 @@ final class HomeViewController: UIViewController {
         view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
             moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            moviesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
@@ -166,9 +167,10 @@ final class HomeViewController: UIViewController {
     
     private func setupTitleLabelConstraints() {
         view.addSubview(titleLabel)
-        
-        titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 52),
+            titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        ])
     }
     
     private func updateTitleLabelPosition() {

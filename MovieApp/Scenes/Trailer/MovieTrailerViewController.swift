@@ -9,13 +9,13 @@ import UIKit
 import AVFoundation
 
 class MovieTrailerViewController: UIViewController {
-
+    
     // MARK: Properties
     private let videoURL: URL
     private let avPlayer = AVPlayer()
     private var isPlaying = false
-
-    // MARK: UI Components
+    
+    // MARK: Components
     private let backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "x"), for: .normal)
@@ -30,14 +30,14 @@ class MovieTrailerViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-
+    
     private let playPauseButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "pause"), for: .normal)
+        button.setTitle("Play", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     private let slider: UISlider = {
         let slider = UISlider()
         slider.backgroundColor = .black
@@ -46,39 +46,39 @@ class MovieTrailerViewController: UIViewController {
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
-
+    
     private let minusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "minus"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     private let plusButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "plus"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
-    // MARK: Initialization
+    
+    // MARK: Init
     init(videoURL: URL) {
         self.videoURL = videoURL
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         setupPlayer()
     }
-
-    // MARK: UI Setup
+    
+    // MARK: Setup
     private func setup() {
         setupVideoPlayerViewConstraints()
         setupMinusButtonConstraints()
@@ -115,7 +115,7 @@ class MovieTrailerViewController: UIViewController {
             playPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-
+    
     private func setupSliderConstraints() {
         view.addSubview(slider)
         NSLayoutConstraint.activate([
@@ -124,7 +124,7 @@ class MovieTrailerViewController: UIViewController {
             slider.topAnchor.constraint(equalTo: videoPlayerView.bottomAnchor, constant: 60),
         ])
     }
-
+    
     private func setupMinusButtonConstraints() {
         view.addSubview(minusButton)
         NSLayoutConstraint.activate([
@@ -132,7 +132,7 @@ class MovieTrailerViewController: UIViewController {
             minusButton.topAnchor.constraint(equalTo: videoPlayerView.bottomAnchor, constant: 20)
         ])
     }
-
+    
     private func setupPlusButtonConstraints() {
         view.addSubview(plusButton)
         NSLayoutConstraint.activate([
@@ -148,39 +148,48 @@ class MovieTrailerViewController: UIViewController {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34)
         ])
     }
-
+    
     // MARK: Player Setup
     private func setupPlayer() {
         let playerItem = AVPlayerItem(url: videoURL)
         avPlayer.replaceCurrentItem(with: playerItem)
-
+        
         let playerLayer = AVPlayerLayer(player: avPlayer)
-        playerLayer.frame = videoPlayerView.bounds
+        playerLayer.frame.size.width = 386
+        playerLayer.frame.size.height = 196
+        videoPlayerView.clipsToBounds = true
+        playerLayer.cornerRadius = 12
         videoPlayerView.layer.addSublayer(playerLayer)
         playerLayer.videoGravity = .resizeAspectFill
+        
+        avPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: .main) { [weak self] time in
+            self?.updateSliderValue(with: time)
+        }
     }
-
+    
     @objc private func playPauseButtonTapped() {
         if isPlaying {
             avPlayer.pause()
             playPauseButton.setTitle("Play", for: .normal)
+            playPauseButton.setImage(nil, for: .normal)
         } else {
             avPlayer.play()
+            playPauseButton.setTitle("", for: .normal)
             playPauseButton.setImage(UIImage(named: "pause"), for: .normal)
         }
         isPlaying.toggle()
     }
-
+    
     @objc private func minusButtonTapped() {
         seek(to: avPlayer.currentTime() - CMTime(seconds: 10, preferredTimescale: 1))
     }
-
+    
     @objc private func plusButtonTapped() {
         seek(to: avPlayer.currentTime() + CMTime(seconds: 10, preferredTimescale: 1))
     }
-
+    
     @objc private func sliderValueChanged() {
-        let time = CMTime(seconds: Double(slider.value), preferredTimescale: 1)
+        let time = CMTime(seconds: Double(slider.value) * (avPlayer.currentItem?.duration.seconds ?? 1), preferredTimescale: 1)
         seek(to: time)
     }
     
@@ -188,9 +197,14 @@ class MovieTrailerViewController: UIViewController {
         print("Back button tapped")
         dismiss(animated: true, completion: nil)
     }
-
-    // MARK: Helper method to handle seeking
+    
     private func seek(to time: CMTime) {
         avPlayer.seek(to: time)
+    }
+    
+    private func updateSliderValue(with time: CMTime) {
+        let totalTime = avPlayer.currentItem?.duration ?? CMTime(seconds: 1, preferredTimescale: 1)
+        let progress = Float(time.seconds / totalTime.seconds)
+        slider.value = progress
     }
 }
