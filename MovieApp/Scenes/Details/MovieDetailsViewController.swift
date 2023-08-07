@@ -79,7 +79,7 @@ class MovieDetailsViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     private let movieDurationLabel: LabelsContainerView = {
         let label = LabelsContainerView()
         label.labelText = "1h 50m"
@@ -133,7 +133,7 @@ class MovieDetailsViewController: UIViewController {
     
     // MARK: Properties
     weak var delegate: MovieDetailsViewControllerDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()

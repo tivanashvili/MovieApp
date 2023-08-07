@@ -135,3 +135,13 @@ class MoviesCollectionViewCell: UICollectionViewCell {
         movieYearLabel.text = String(movie.year)
     }
 }
+
+extension MoviesCollectionViewCell {
+    enum Constants {
+        enum MoviePoster {
+            static let backgroundColor = UIColor(hex: "1C1C1C")
+            static let cornerRadius: CGFloat = 16
+            static let leading: CGFloat = 16
+        }
+    }
+}

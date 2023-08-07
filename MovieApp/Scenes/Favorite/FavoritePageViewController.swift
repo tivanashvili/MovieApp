@@ -26,7 +26,7 @@ class FavoritePageViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.isScrollEnabled = true
         view.backgroundColor = .clear
-        view.register(FavoriteCollectionViewCell.self, forCellWithReuseIdentifier: "FavoriteCollectionViewCell")
+        view.register(FavoriteCollectionViewCell.self, forCellWithReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier)
         view.delegate = self
         view.dataSource = self
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -43,13 +43,13 @@ class FavoritePageViewController: UIViewController {
     
     private let emptyFavoritePageImageView: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "noMovies")
+        image.image = Constants.EmptyFavoritePageImageView.image
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
     // MARK: Properties
-    var isFavoriteButtonSelected = false
+    private var isFavoriteButtonSelected = false
     
     private let movies: [Movie] = [
         Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
@@ -89,9 +89,9 @@ class FavoritePageViewController: UIViewController {
     private func setupMoviesCollectionViewConstraints() {
         view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
-            moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.MoviesCollectionView.top),
+            moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.MoviesCollectionView.leading),
+            moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.MoviesCollectionView.trailing),
             moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
@@ -102,7 +102,7 @@ class FavoritePageViewController: UIViewController {
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            customNavigationBar.heightAnchor.constraint(equalToConstant: 70)
+            customNavigationBar.heightAnchor.constraint(equalToConstant: Constants.CustomNavigationBar.height)
         ])
     }
     
@@ -129,7 +129,7 @@ extension FavoritePageViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionViewCell", for: indexPath) as! FavoriteCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier, for: indexPath) as! FavoriteCollectionViewCell
         
         let movie = movies[indexPath.row]
         cell.configure(with: movie)
@@ -138,7 +138,7 @@ extension FavoritePageViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 164, height: 270)
+        CGSize(width: Constants.MoviesCollectionView.cellWidth, height: Constants.MoviesCollectionView.cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -164,6 +164,23 @@ private extension FavoritePageViewController {
         enum FavoriteMoviesLabel {
             static let text = "Favorite Movies"
             static let font = UIFont.boldSystemFont(ofSize: 18)
+        }
+        
+        enum MoviesCollectionView {
+            static let reuseIdentifier = "FavoriteCollectionViewCell"
+            static let top: CGFloat = 8
+            static let leading: CGFloat = 16
+            static let trailing: CGFloat = -16
+            static let cellHeight: CGFloat = 270
+            static let cellWidth: CGFloat = 164
+        }
+        
+        enum EmptyFavoritePageImageView {
+            static let image = UIImage(named: "noMovies")
+        }
+        
+        enum CustomNavigationBar {
+            static let height: CGFloat = 70
         }
     }
 }

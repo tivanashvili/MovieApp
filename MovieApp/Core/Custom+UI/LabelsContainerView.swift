@@ -8,7 +8,7 @@
 import UIKit
 
 class LabelsContainerView: UIView {
-
+    
     private let label: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -16,21 +16,21 @@ class LabelsContainerView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
         layer.cornerRadius = 12
         backgroundColor = UIColor(hex: "1C1C1C")
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -39,12 +39,12 @@ class LabelsContainerView: UIView {
         get { return label.text }
         set { label.text = newValue }
     }
-
+    
     var image: UIImage? {
         get { return imageView.image }
         set { imageView.image = newValue }
     }
-
+    
     private func setupView() {
         setupImageViewConstraints()
         setupLabelConstraints()

@@ -43,7 +43,7 @@ final class SplashViewController: UIViewController {
 
 }
 
-private extension SplashViewController {
+extension SplashViewController {
     enum Constants {
         enum LaunchScreenImage{
             static let image = UIImage(named: "IMDB_Logo")

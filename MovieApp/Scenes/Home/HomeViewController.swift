@@ -85,12 +85,27 @@ final class HomeViewController: UIViewController {
         return view
     }()
     
+    private let loadingIndicator: CustomLoadingIndicator = {
+        let indicator = CustomLoadingIndicator()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
     // MARK: Properties
     private var isFilterSelected = false
     private var selectedIndexPath: IndexPath?
     private var filteredMovies: [Movie] = []
     
-    private let categories = ["Action", "Drama", "Thriller", "Sci-Fi", "Action", "Comedy", "Drama", "Thriller", "Sci-Fi"]
+    private let categories: [GenreCategory] = [
+        GenreCategory(title: "Comedy"),
+        GenreCategory(title: "Drama"),
+        GenreCategory(title: "Thriller"),
+        GenreCategory(title: "Action"),
+        GenreCategory(title: "Drama"),
+        GenreCategory(title: "Thriller"),
+        GenreCategory(title: "Comedy"),
+        GenreCategory(title: "Thriller")
+    ]
     
     private let movies: [Movie] = [
         Movie(poster: "movie1", name: "The Baby Boss", genre: "Drama", year: 2017),
@@ -114,6 +129,8 @@ final class HomeViewController: UIViewController {
         customNavigationBar.setFavoritesButtonSelected(false)
         setupViews()
         addTapGestureRecognizer()
+        //loadingIndicator.startAnimating()
+        loadingIndicator.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -150,6 +167,7 @@ final class HomeViewController: UIViewController {
         setupMoviesCollectionView()
         setupCustomNavigationBarConstraints()
         setupErrorViewConstraints()
+        setupLoadingIndicatorConstraints()
     }
     
     private func addTapGestureRecognizer() {
@@ -160,6 +178,8 @@ final class HomeViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+        cancelButton.isHidden = true
+        filterButton.isHidden = false
     }
     
     private func setupSearchBarConstraints() {
@@ -190,7 +210,7 @@ final class HomeViewController: UIViewController {
             cancelButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: Constants.CancelButton.leading)
         ])
     }
-
+    
     private func setupMovieCategoryCollectionView() {
         view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
@@ -244,12 +264,12 @@ final class HomeViewController: UIViewController {
         ])
     }
     
-    private func calculateCellSize(for category: String) -> CGSize {
-        let cellLabel = UILabel()
-        cellLabel.text = category
-        cellLabel.sizeToFit()
-        let cellWidth = cellLabel.frame.width + Constants.MovieCategoryCollectionView.cellWidth
-        return CGSize(width: cellWidth, height: Constants.MovieCategoryCollectionView.cellHeight)
+    private func setupLoadingIndicatorConstraints() {
+        view.addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }
 
@@ -300,12 +320,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == self.movieCategoryCollectionView {
-            let movieCategoryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCategoryCollectionViewCell", for: indexPath) as! MovieCategoryCollectionViewCell
-            let category = categories[indexPath.row]
-            movieCategoryCollectionViewCell.configure(with: category)
+            let movieCategoryCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MovieCategoryCollectionView.reuseIdentifier, for: indexPath) as! MovieCategoryCollectionViewCell
+            let genreCategory = categories[indexPath.row]
+            movieCategoryCollectionViewCell.configure(with: genreCategory)
             return movieCategoryCollectionViewCell
         } else if collectionView == self.moviesCollectionView {
-            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoviesCollectionViewCell", for: indexPath) as! MoviesCollectionViewCell
+            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier, for: indexPath) as! MoviesCollectionViewCell
             let movie: Movie
             if isFilterSelected {
                 movie = filteredMovies[indexPath.row]
@@ -339,7 +359,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 selectedIndexPath = indexPath
                 
                 let selectedCategory = categories[indexPath.row]
-                filteredMovies = movies.filter { $0.genre == selectedCategory }
+                filteredMovies = movies.filter { movie in
+                    return movie.genre == selectedCategory.title
+                }
                 
                 moviesCollectionView.reloadData()
             }
@@ -361,17 +383,17 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == movieCategoryCollectionView {
             let category = categories[indexPath.row]
-            let cellSize = calculateCellSize(for: category)
-            return cellSize
+            let cell = MovieCategoryCollectionViewCell()
+            cell.configure(with: category)
+            return cell.contentView.frame.size
         } else if collectionView == moviesCollectionView {
             return CGSize(width: Constants.MoviesCollectionView.cellWidth, height: Constants.MoviesCollectionView.cellHeight)
         }
-        
         return CGSize()
     }
 }
 
-private extension HomeViewController {
+extension HomeViewController {
     enum Constants {
         enum SearchBar {
             static let backgroundColor = UIColor(hex: "1C1C1C")

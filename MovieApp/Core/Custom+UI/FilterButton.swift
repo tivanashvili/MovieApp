@@ -39,7 +39,7 @@ final class FilterButton: UIButton {
     @objc private func buttonTapped() {
         isSelected.toggle()
         delegate?.didToggleFilterSection()
-
+        
         if isSelected {
             let selectedImage = UIImage(named: "selectedFilter")
             setImage(selectedImage, for: .normal)

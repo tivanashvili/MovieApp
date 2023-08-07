@@ -11,9 +11,9 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
     private let cellLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 10)
+        label.font = Constants.CellLabel.font
         label.textColor = .white
-        label.numberOfLines = 1
+        label.numberOfLines = Constants.CellLabel.numberOfLines
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -30,8 +30,8 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = 12
-        layer.borderWidth = 1
+        layer.cornerRadius = Constants.CellLabel.cornerRadius
+        layer.borderWidth = Constants.CellLabel.cornerWidth
         layer.borderColor = isSelectedCell ? UIColor.clear.cgColor : UIColor.white.cgColor
     }
     
@@ -43,7 +43,7 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
     private func updateAppearance() {
         if isSelectedCell {
-            backgroundColor = UIColor(hex: "F5C518")
+            backgroundColor = Constants.CellLabel.backgroundColor
             layer.borderWidth = 0
             cellLabel.textColor = .black
         } else {
@@ -57,13 +57,34 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
     private func setupCellLabelConstraints() {
         contentView.addSubview(cellLabel)
         NSLayoutConstraint.activate([
-            cellLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
-            cellLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
+            cellLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.CellLabel.top),
+            cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.CellLabel.leading),
+            cellLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: Constants.CellLabel.bottom)
         ])
     }
     
-    func configure(with category: String) {
-        cellLabel.text = category
+    func configure(with genreCategory: GenreCategory) {
+        cellLabel.text = genreCategory.title
+        cellLabel.sizeToFit()
+        let cellWidth = cellLabel.frame.width + Constants.CellLabel.cellWidth
+        let cellSize = CGSize(width: cellWidth, height: Constants.CellLabel.cellHeight)
+        contentView.frame.size = cellSize
+    }
+}
+
+extension MovieCategoryCollectionViewCell {
+    enum Constants {
+        enum CellLabel {
+            static let font = UIFont(name: "Montserrat-VariableFont_wght.ttf", size: 10)
+            static let numberOfLines = 1
+            static let backgroundColor = UIColor(hex: "F5C518")
+            static let top: CGFloat = 4
+            static let leading: CGFloat = 6
+            static let bottom: CGFloat = -4
+            static let cornerWidth: CGFloat = 1
+            static let cornerRadius: CGFloat = 12
+            static let cellWidth: CGFloat = 16
+            static let cellHeight: CGFloat = 26
+        }
     }
 }

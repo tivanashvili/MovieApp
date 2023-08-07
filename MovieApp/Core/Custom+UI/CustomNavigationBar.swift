@@ -34,7 +34,7 @@ final class CustomNavigationBar: UIView {
     
     weak var favoriteButtonDelegate: FavoriteButtonDelegate?
     weak var homeButtonDelegate: HomeButtonDelegate?
-
+    
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
