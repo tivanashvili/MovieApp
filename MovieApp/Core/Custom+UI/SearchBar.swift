@@ -65,8 +65,8 @@ final class SearchBar: UIView {
     
     private func setupViewConstraints() {
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: 36),
-            widthAnchor.constraint(equalToConstant: 299)
+            heightAnchor.constraint(equalToConstant: Constants.SearchBarView.height),
+            widthAnchor.constraint(equalToConstant: Constants.SearchBarView.width)
         ])
     }    
 }
@@ -74,6 +74,10 @@ final class SearchBar: UIView {
 extension SearchBar: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.textFieldStartTyping()
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        searchTextField.text = ""
     }
 }
 
@@ -87,10 +91,16 @@ private extension SearchBar {
             static let bottom: CGFloat = -9
             static let leading: CGFloat = 44
         }
+        
         enum SearchIcon {
             static let image = UIImage(named: "searchImage")
             static let top: CGFloat = 11
             static let leading: CGFloat = 24
+        }
+        
+        enum SearchBarView {
+            static let height: CGFloat = 36
+            static let width: CGFloat = 299
         }
     }
 }

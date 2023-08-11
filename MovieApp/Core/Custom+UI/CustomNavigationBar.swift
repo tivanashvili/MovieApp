@@ -38,10 +38,7 @@ final class CustomNavigationBar: UIView {
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupHomeButtonConstraints()
-        setupFavoritesButtonConstraints()
-        setupFavoriteButton()
-        setupHomeButton()
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +46,13 @@ final class CustomNavigationBar: UIView {
     }
     
     // MARK: Setup
+    private func setupViews() {
+        setupHomeButtonConstraints()
+        setupFavoritesButtonConstraints()
+        setupFavoriteButton()
+        setupHomeButton()
+    }
+    
     private func setupFavoriteButton() {
         let normalImage = UIImage(named: "favoritesButton")
         let selectedImage = UIImage(named: "selectedFavorites")

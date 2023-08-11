@@ -15,19 +15,19 @@ final class SplashViewController: UIViewController {
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupImageConstraints()
         view.backgroundColor = .black
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.AnimationTime.seconds) {
             self.navigateToMainScreen()
         }
     }
     
     func navigateToMainScreen() {
         let homeViewController = HomeViewController()
-
+        
         homeViewController.navigationItem.setHidesBackButton(true, animated: false)
         
         navigationController?.pushViewController(homeViewController, animated: false)
@@ -40,13 +40,17 @@ final class SplashViewController: UIViewController {
             image.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
+    
 }
 
 extension SplashViewController {
     enum Constants {
         enum LaunchScreenImage{
             static let image = UIImage(named: "IMDB_Logo")
+        }
+        
+        enum AnimationTime {
+            static let seconds: CGFloat = 1
         }
     }
 }

@@ -5,7 +5,6 @@
 //  Created by tornike ivanashvili on 17.07.23.
 //
 
-import Foundation
 import UIKit
 
 extension UIColor {
@@ -35,4 +34,3 @@ extension UIColor {
         )
     }
 }
-
