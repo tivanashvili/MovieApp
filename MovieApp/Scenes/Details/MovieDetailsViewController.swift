@@ -11,7 +11,7 @@ protocol MovieDetailsViewControllerDelegate: AnyObject {
     func didTapBackButton()
 }
 
-class MovieDetailsViewController: UIViewController {
+final class MovieDetailsViewController: UIViewController {
     
     // MARK: Components
     private let backButton: UIButton = {
@@ -169,15 +169,15 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func setupTitleLabelConstraints() {
-         view.addSubview(titleLabel)
-         NSLayoutConstraint.activate([
+        view.addSubview(titleLabel)
+        NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.TitleLabel.top),
-             titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
-             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: Constants.TitleLabel.height),
-             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-         ])
-     }
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
     
     private func setupMoviePosterConstraints() {
         view.addSubview(moviePoster)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MovieCategoryCollectionViewCell: UICollectionViewCell {
+final class MovieCategoryCollectionViewCell: UICollectionViewCell {
     
     private let cellLabel: UILabel = {
         let label = UILabel()

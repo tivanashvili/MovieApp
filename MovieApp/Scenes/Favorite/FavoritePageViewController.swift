@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FavoritePageViewController: UIViewController {
+final class FavoritePageViewController: UIViewController {
     
     // MARK: Components
     private let titleLabel: UILabel = {

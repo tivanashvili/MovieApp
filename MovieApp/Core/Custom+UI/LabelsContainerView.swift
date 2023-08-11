@@ -7,12 +7,12 @@
 
 import UIKit
 
-class LabelsContainerView: UIView {
+final class LabelsContainerView: UIView {
     
     private let label: UILabel = {
         let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textColor = Constants.labelTextColor
+        label.font = Constants.labelFont
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -27,8 +27,8 @@ class LabelsContainerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
-        layer.cornerRadius = 12
-        backgroundColor = UIColor(hex: "1C1C1C")
+        layer.cornerRadius = Constants.cornerRadius
+        backgroundColor = Constants.backgroundColor
     }
     
     required init?(coder: NSCoder) {
@@ -53,21 +53,37 @@ class LabelsContainerView: UIView {
     private func setupLabelConstraints() {
         addSubview(label)
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 4),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+            label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: Constants.labelLeading),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: Constants.labelTop),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Constants.labelBottom),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Constants.labelTrailing)
         ])
     }
     
     private func setupImageViewConstraints() {
         addSubview(imageView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant:  10),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -7),
-            imageView.topAnchor.constraint(equalTo: topAnchor, constant: 7),
-            imageView.heightAnchor.constraint(equalToConstant: 12)
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant:  Constants.imageLeading),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Constants.imageBottom),
+            imageView.topAnchor.constraint(equalTo: topAnchor, constant: Constants.imageTop),
+            imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
         ])
     }
 }
 
+extension LabelsContainerView {
+    enum Constants {
+        static let labelTextColor: UIColor = .white
+        static let labelFont: UIFont = .boldSystemFont(ofSize: 14)
+        static let cornerRadius: CGFloat = 12
+        static let backgroundColor: UIColor = UIColor(hex: "1C1C1C")
+        static let labelLeading: CGFloat = 4
+        static let labelTop: CGFloat = 4
+        static let labelBottom: CGFloat = -4
+        static let labelTrailing: CGFloat = -10
+        static let imageLeading: CGFloat = 10
+        static let imageBottom: CGFloat = -7
+        static let imageTop: CGFloat = 7
+        static let imageHeight: CGFloat = 12
+    }
+}

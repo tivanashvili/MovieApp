@@ -27,11 +27,9 @@ final class FilterButton: UIButton {
     
     // MARK: Setup
     private func setUp() {
-        let normalImage = UIImage(named: "Filter")
-        let selectedImage = UIImage(named: "SelectedFilter")
+        let normalImage = Constants.normalImage
         
         setImage(normalImage, for: .normal)
-        setImage(selectedImage, for: .selected)
         addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         translatesAutoresizingMaskIntoConstraints = false
     }
@@ -50,3 +48,9 @@ final class FilterButton: UIButton {
     }
 }
 
+extension FilterButton {
+    enum Constants {
+        static let normalImage = UIImage(named: "Filter")
+        static let selectedImage = UIImage(named: "selectedFilter")
+    }
+}

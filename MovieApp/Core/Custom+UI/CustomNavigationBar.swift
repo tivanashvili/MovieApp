@@ -20,14 +20,14 @@ final class CustomNavigationBar: UIView {
     // MARK: Components
     private let homeButton: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 12
+        button.layer.cornerRadius = Constants.buttonCornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let favoritesButton: UIButton = {
         let button = UIButton()
-        button.layer.cornerRadius = 12
+        button.layer.cornerRadius = Constants.buttonCornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -54,20 +54,14 @@ final class CustomNavigationBar: UIView {
     }
     
     private func setupFavoriteButton() {
-        let normalImage = UIImage(named: "favoritesButton")
-        let selectedImage = UIImage(named: "selectedFavorites")
-        
-        favoritesButton.setImage(normalImage, for: .normal)
-        favoritesButton.setImage(selectedImage, for: .selected)
+        favoritesButton.setImage(Constants.favoriteButtonImage, for: .normal)
+        favoritesButton.setImage(Constants.selectedFavoriteButtonImage, for: .selected)
         favoritesButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
     }
     
     private func setupHomeButton() {
-        let normalImage = UIImage(named: "homeButton")
-        let selectedImage = UIImage(named: "selectedHome")
-        
-        homeButton.setImage(normalImage, for: .normal)
-        homeButton.setImage(selectedImage, for: .selected)
+        homeButton.setImage(Constants.homeButtonImage, for: .normal)
+        homeButton.setImage(Constants.selectedHomeButtonImage, for: .selected)
         homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
     }
     
@@ -87,19 +81,32 @@ final class CustomNavigationBar: UIView {
     private func setupHomeButtonConstraints() {
         addSubview(homeButton)
         NSLayoutConstraint.activate([
-            homeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant:  16),
-            homeButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
-            homeButton.topAnchor.constraint(equalTo: topAnchor, constant: 12)
+            homeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant:  Constants.buttonLeading),
+            homeButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.buttonBottom),
+            homeButton.topAnchor.constraint(equalTo: topAnchor, constant: Constants.buttonTop)
         ])
     }
     
     private func setupFavoritesButtonConstraints() {
         addSubview(favoritesButton)
         NSLayoutConstraint.activate([
-            favoritesButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant:  -16),
-            favoritesButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
-            favoritesButton.topAnchor.constraint(equalTo: topAnchor, constant: 12)
+            favoritesButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant:  -Constants.buttonTrailing),
+            favoritesButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Constants.buttonBottom),
+            favoritesButton.topAnchor.constraint(equalTo: topAnchor, constant: Constants.buttonTop)
         ])
     }
-    
+}
+
+extension CustomNavigationBar {
+    enum Constants {
+        static let buttonCornerRadius: CGFloat = 12
+        static let buttonLeading: CGFloat = 16
+        static let buttonTrailing: CGFloat = 16
+        static let buttonTop: CGFloat = 12
+        static let buttonBottom: CGFloat = 12
+        static let favoriteButtonImage = UIImage(named: "favoritesButton")
+        static let selectedFavoriteButtonImage = UIImage(named: "selectedFavorites")
+        static let homeButtonImage = UIImage(named: "homeButton")
+        static let selectedHomeButtonImage = UIImage(named: "selectedHome")
+    }
 }

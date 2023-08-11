@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoviesCollectionViewCell: UICollectionViewCell {
+final class MoviesCollectionViewCell: UICollectionViewCell {
     
     private let moviePoster: UIImageView = {
         let image = UIImageView()
