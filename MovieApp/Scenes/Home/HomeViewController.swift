@@ -108,7 +108,7 @@ final class HomeViewController: UIViewController {
     ]
     
     private let movies: [Movie] = [
-        Movie(poster: "movie1", name: "The Baby Boss", genre: "Drama", year: 2017),
+        Movie(poster: "movie1", name: "The Baby BossBossBossBossBossBoss", genre: "Drama", year: 2017),
         Movie(poster: "movie2", name: "The Baby Boss", genre: "Thriller", year: 2016),
         Movie(poster: "movie3", name: "The Baby Boss", genre: "Action", year: 2017),
         Movie(poster: "movie4", name: "The Baby Boss", genre: "Thriller", year: 2017),

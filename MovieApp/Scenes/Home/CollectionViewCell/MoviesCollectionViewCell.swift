@@ -28,6 +28,7 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
         nameLabel.font = UIFont.customFont(.extraBold, size: Constants.FontSize.labelSize)
         nameLabel.backgroundColor = .clear
         nameLabel.textColor = .white
+        nameLabel.lineBreakMode = .byTruncatingTail
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         return nameLabel
     }()
@@ -101,7 +102,8 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(movieNameLabel)
         NSLayoutConstraint.activate([
             movieNameLabel.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.MovieNameLabel.top),
-            movieNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.MovieNameLabel.leading)
+            movieNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.MovieNameLabel.leading),
+            movieNameLabel.widthAnchor.constraint(equalToConstant: Constants.MovieNameLabel.width)
         ])
     }
     
@@ -157,6 +159,7 @@ extension MoviesCollectionViewCell {
         enum MovieNameLabel {
             static let top: CGFloat = 4
             static let leading: CGFloat = 6
+            static let width: CGFloat = 128
         }
         
         enum GenreLabel {
