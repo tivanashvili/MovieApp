@@ -139,8 +139,8 @@ final class HomeViewController: UIViewController {
     }
     
     @objc private func cancelButtonTapped() {
-        filterButton.isHidden = false
         cancelButton.isHidden = true
+        filterButton.isHidden = false
     }
     
     // MARK: Actions
@@ -298,8 +298,10 @@ extension HomeViewController: MovieDetailsViewControllerDelegate {
 // MARK: - SearchBarDelegate
 extension HomeViewController: SearchBarDelegate {
     func textFieldStartTyping() {
+        filterButton.reset()
         filterButton.isHidden = true
         cancelButton.isHidden = false
+        movieCategoryCollectionView.isHidden = true
     }
 }
 

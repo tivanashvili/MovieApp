@@ -46,6 +46,15 @@ final class FilterButton: UIButton {
             setImage(normalImage, for: .normal)
         }
     }
+    
+    func reset() {
+        if self.isSelected {
+            isSelected.toggle()
+            delegate?.didToggleFilterSection()
+            let normalImage = UIImage(named: "Filter")
+            setImage(normalImage, for: .normal)
+        }
+    }
 }
 
 extension FilterButton {
