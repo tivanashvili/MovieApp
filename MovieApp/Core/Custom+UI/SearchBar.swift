@@ -79,6 +79,11 @@ extension SearchBar: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         searchTextField.text = ""
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchTextField.endEditing(true)
+        return true
+    }
 }
 
 private extension SearchBar {
