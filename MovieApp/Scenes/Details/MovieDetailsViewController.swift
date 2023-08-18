@@ -307,7 +307,7 @@ private extension MovieDetailsViewController {
         }
         
         enum FavoriteButton {
-            static let image = UIImage(named: "Favorite")
+            static let image = UIImage(named: "detailsFavorite")
             static let trailingConstraint: CGFloat = -16
             static let topConstraint: CGFloat = 26
             static let height: CGFloat = 22
