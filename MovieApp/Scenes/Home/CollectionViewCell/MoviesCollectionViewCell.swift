@@ -58,6 +58,9 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    // MARK: Properties
+    private var isFavorite = false
+    
     // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -118,6 +121,7 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
     
     private func setupFavouriteButtonConstraints() {
         contentView.addSubview(favouriteButton)
+        favouriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         NSLayoutConstraint.activate([
             favouriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.FavoriteButton.top),
             favouriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.FavoriteButton.trailing)
@@ -131,6 +135,15 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
             genreLabelContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.GenreLabelContainer.trailing),
             genreLabelContainerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, constant: Constants.GenreLabelContainer.width)
         ])
+    }
+    
+    @objc private func toggleFavorite() {
+        isFavorite.toggle()
+        if isFavorite {
+            favouriteButton.setImage(UIImage(named: Constants.FavoriteButton.selectedImage), for: .normal)
+        } else {
+            favouriteButton.setImage(UIImage(named: Constants.FavoriteButton.image), for: .normal)
+        }
     }
     
     func configure(with movie: Movie) {
@@ -152,6 +165,7 @@ extension MoviesCollectionViewCell {
         
         enum FavoriteButton {
             static let image = "Favorite"
+            static let selectedImage = "selectedFavorite"
             static let top: CGFloat = 4
             static let trailing: CGFloat = -4
         }

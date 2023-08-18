@@ -18,7 +18,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     private let favouriteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: Constants.FavoriteButton.image), for: .normal)
+        button.setImage(UIImage(named: Constants.FavoriteButton.selectedImage), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -56,6 +56,9 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    // MARK: Properties
+    private var isFavorite = false
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -116,6 +119,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
     
     private func setupFavouriteButtonConstraints() {
         contentView.addSubview(favouriteButton)
+        favouriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         NSLayoutConstraint.activate([
             favouriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.FavoriteButton.top),
             favouriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.FavoriteButton.trailing)
@@ -129,6 +133,15 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
             genreLabelContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.GenreLabelContainer.trailing),
             genreLabelContainerView.widthAnchor.constraint(lessThanOrEqualTo: contentView.widthAnchor, constant: Constants.GenreLabelContainer.width)
         ])
+    }
+    
+    @objc private func toggleFavorite() {
+        isFavorite.toggle()
+        if isFavorite {
+            favouriteButton.setImage(UIImage(named: Constants.FavoriteButton.image), for: .normal)
+        } else {
+            favouriteButton.setImage(UIImage(named: Constants.FavoriteButton.selectedImage), for: .normal)
+        }
     }
     
     func configure(with movie: Movie) {
@@ -149,7 +162,8 @@ extension FavoriteCollectionViewCell {
         }
         
         enum FavoriteButton {
-            static let image = "selectedFavorite"
+            static let selectedImage = "selectedFavorite"
+            static let image = "Favorite"
             static let top: CGFloat = 4
             static let trailing: CGFloat = -4
         }

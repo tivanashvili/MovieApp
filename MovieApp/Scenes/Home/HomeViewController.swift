@@ -164,8 +164,8 @@ final class HomeViewController: UIViewController {
         setupCancelButtonConstraints()
         setupMovieCategoryCollectionView()
         setupTitleLabelConstraints()
-        setupMoviesCollectionView()
         setupCustomNavigationBarConstraints()
+        setupMoviesCollectionView()
         setupErrorViewConstraints()
         setupLoadingIndicatorConstraints()
     }
@@ -227,7 +227,7 @@ final class HomeViewController: UIViewController {
             moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             moviesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.MoviesCollectionView.leading),
             moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.MoviesCollectionView.trailing),
-            moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            moviesCollectionView.bottomAnchor.constraint(equalTo: customNavigationBar.topAnchor)
         ])
     }
     
@@ -249,7 +249,7 @@ final class HomeViewController: UIViewController {
         NSLayoutConstraint.activate([
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: Constants.CustomNavigationBar.bottom),
             customNavigationBar.heightAnchor.constraint(equalToConstant: Constants.CustomNavigationBar.height)
         ])
     }
@@ -448,6 +448,7 @@ extension HomeViewController {
         
         enum CustomNavigationBar {
             static let height: CGFloat = 70
+            static let bottom: CGFloat = -12
         }
     }
 }

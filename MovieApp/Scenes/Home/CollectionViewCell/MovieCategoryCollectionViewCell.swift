@@ -13,6 +13,7 @@ final class MovieCategoryCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = Constants.CellLabel.font
         label.textColor = .white
+        label.textAlignment = .center
         label.numberOfLines = Constants.CellLabel.numberOfLines
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

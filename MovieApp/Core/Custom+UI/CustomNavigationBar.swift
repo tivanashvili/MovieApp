@@ -65,6 +65,7 @@ final class CustomNavigationBar: UIView {
         homeButton.addTarget(self, action: #selector(homeButtonTapped), for: .touchUpInside)
     }
     
+    // MARK: Methods
     @objc private func favoritesButtonTapped(_ sender: UIButton) {
         favoriteButtonDelegate?.didTapFavoritesButton()
     }

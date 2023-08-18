@@ -68,12 +68,12 @@ final class FavoritePageViewController: UIViewController {
         super.viewDidLoad()
         setupTitleLabelConstraints()
         customNavigationBar.setFavoritesButtonSelected(true)
+        setupCustomNavigationBarConstraints()
         if movies.count == 0 {
             setupEmptyFavoritePageImageViewConstraints()
         }else {
             setupMoviesCollectionViewConstraints()
         }
-        setupCustomNavigationBarConstraints()
     }
     
     // MARK: Setup Views
@@ -92,7 +92,7 @@ final class FavoritePageViewController: UIViewController {
             moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Constants.MoviesCollectionView.top),
             moviesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.MoviesCollectionView.leading),
             moviesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.MoviesCollectionView.trailing),
-            moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            moviesCollectionView.bottomAnchor.constraint(equalTo: customNavigationBar.topAnchor)
         ])
     }
     
@@ -101,7 +101,7 @@ final class FavoritePageViewController: UIViewController {
         NSLayoutConstraint.activate([
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            customNavigationBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: Constants.CustomNavigationBar.bottom),
             customNavigationBar.heightAnchor.constraint(equalToConstant: Constants.CustomNavigationBar.height)
         ])
     }
@@ -181,6 +181,7 @@ private extension FavoritePageViewController {
         
         enum CustomNavigationBar {
             static let height: CGFloat = 70
+            static let bottom: CGFloat = -12
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C41155C92A8D20F900B3AE15 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41155C82A8D20F900B3AE15 /* NetworkManager.swift */; };
 		C4478F1C2A652E310096614B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F1B2A652E310096614B /* AppDelegate.swift */; };
 		C4478F1E2A652E310096614B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F1D2A652E310096614B /* SceneDelegate.swift */; };
 		C4478F202A652E310096614B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478F1F2A652E310096614B /* HomeViewController.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C41155C82A8D20F900B3AE15 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		C4478F182A652E310096614B /* MovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4478F1B2A652E310096614B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4478F1D2A652E310096614B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C41155C72A8D20E100B3AE15 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				C41155C82A8D20F900B3AE15 /* NetworkManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		C4478F0F2A652E310096614B = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +181,7 @@
 		C4478F372A6539430096614B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C41155C72A8D20E100B3AE15 /* Network */,
 				C4478F502A6800390096614B /* Models */,
 				C4478F442A6552110096614B /* Custom+UI */,
 				C4478F392A653AD80096614B /* Extensions */,
@@ -375,6 +386,7 @@
 				C4C45EE22A6E7C9400BC2DC7 /* LabelsContainerView.swift in Sources */,
 				C4478F4F2A6579C30096614B /* MovieCategoryCollectionViewCell.swift in Sources */,
 				C47F80712A7D1B9E008EEC08 /* CustomLoadingIndicator.swift in Sources */,
+				C41155C92A8D20F900B3AE15 /* NetworkManager.swift in Sources */,
 				C4478F3B2A653AEC0096614B /* UIColor + Extension.swift in Sources */,
 				C4478F482A6567E70096614B /* UITextField + Extension.swift in Sources */,
 			);
