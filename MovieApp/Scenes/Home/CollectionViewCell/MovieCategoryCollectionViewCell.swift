@@ -84,7 +84,7 @@ extension MovieCategoryCollectionViewCell {
             static let bottom: CGFloat = -4
             static let cornerWidth: CGFloat = 1
             static let cornerRadius: CGFloat = 12
-            static let cellWidth: CGFloat = 16
+            static let cellWidth: CGFloat = 12
             static let cellHeight: CGFloat = 26
         }
     }

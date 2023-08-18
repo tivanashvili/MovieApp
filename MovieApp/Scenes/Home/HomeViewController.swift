@@ -89,7 +89,7 @@ final class HomeViewController: UIViewController {
     
     private let categories: [GenreCategory] = [
         GenreCategory(title: "Comedy"),
-        GenreCategory(title: "Drama"),
+        GenreCategory(title: "Drama,BossBossBossBossBossBossBossBossBossBossBossBoss"),
         GenreCategory(title: "Thriller"),
         GenreCategory(title: "Action"),
         GenreCategory(title: "Drama"),
