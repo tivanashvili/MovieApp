@@ -80,11 +80,11 @@ extension MovieCategoryCollectionViewCell {
             static let numberOfLines = 1
             static let backgroundColor = UIColor(hex: "F5C518")
             static let top: CGFloat = 4
-            static let leading: CGFloat = 6
+            static let leading: CGFloat = 12
             static let bottom: CGFloat = -4
             static let cornerWidth: CGFloat = 1
             static let cornerRadius: CGFloat = 12
-            static let cellWidth: CGFloat = 12
+            static let cellWidth: CGFloat = 24
             static let cellHeight: CGFloat = 26
         }
     }
