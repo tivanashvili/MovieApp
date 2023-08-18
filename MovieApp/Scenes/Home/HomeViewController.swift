@@ -15,14 +15,12 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = Constants.SearchBar.backgroundColor
         view.layer.cornerRadius = Constants.SearchBar.cornerRadius
         view.delegate = self
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private lazy var filterButton: FilterButton = {
         let button = FilterButton()
         button.delegate = self
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -30,7 +28,6 @@ final class HomeViewController: UIViewController {
         let button = UIButton()
         button.setTitle(Constants.CancelButton.title, for: .normal)
         button.titleLabel?.font = Constants.CancelButton.fontsize
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -44,7 +41,6 @@ final class HomeViewController: UIViewController {
         view.register(MovieCategoryCollectionViewCell.self, forCellWithReuseIdentifier: Constants.MovieCategoryCollectionView.reuseIdentifier)
         view.delegate = self
         view.dataSource = self
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -57,7 +53,6 @@ final class HomeViewController: UIViewController {
         view.register(MoviesCollectionViewCell.self, forCellWithReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier)
         view.delegate = self
         view.dataSource = self
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -66,7 +61,6 @@ final class HomeViewController: UIViewController {
         label.font = Constants.TitleLabel.font
         label.text = Constants.TitleLabel.text
         label.textColor = Constants.TitleLabel.color
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clear
         return label
     }()
@@ -74,20 +68,17 @@ final class HomeViewController: UIViewController {
     private lazy var customNavigationBar: CustomNavigationBar = {
         let view = CustomNavigationBar()
         view.favoriteButtonDelegate = self
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black
         return view
     }()
     
     private let errorView: ErrorView = {
         let view = ErrorView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let loadingIndicator: CustomLoadingIndicator = {
         let indicator = CustomLoadingIndicator()
-        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
     
@@ -159,6 +150,13 @@ final class HomeViewController: UIViewController {
     
     // MARK: Setup
     private func setupViews() {
+        let views: [UIView] = [searchBar, filterButton, cancelButton, movieCategoryCollectionView, moviesCollectionView, titleLabel, customNavigationBar, errorView, loadingIndicator]
+
+        for view in views {
+            view.translatesAutoresizingMaskIntoConstraints = false
+            self.view.addSubview(view)
+        }
+
         setupSearchBarConstraints()
         setupFilterButtonConstraints()
         setupCancelButtonConstraints()
@@ -183,7 +181,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupSearchBarConstraints() {
-        view.addSubview(searchBar)
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.SearchBar.leading)
@@ -191,7 +188,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupFilterButtonConstraints() {
-        view.addSubview(filterButton)
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.FilterButton.trailing),
@@ -201,7 +197,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupCancelButtonConstraints() {
-        view.addSubview(cancelButton)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         NSLayoutConstraint.activate([
             cancelButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.CancelButton.top),
@@ -212,7 +207,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupMovieCategoryCollectionView() {
-        view.addSubview(movieCategoryCollectionView)
         NSLayoutConstraint.activate([
             movieCategoryCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.MovieCategoryCollectionView.top),
             movieCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.MovieCategoryCollectionView.leading),
@@ -222,7 +216,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupMoviesCollectionView() {
-        view.addSubview(moviesCollectionView)
         NSLayoutConstraint.activate([
             moviesCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             moviesCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.MoviesCollectionView.leading),
@@ -232,7 +225,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupTitleLabelConstraints() {
-        view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: Constants.TitleLabel.top),
             titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.TitleLabel.leading)
@@ -245,7 +237,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupCustomNavigationBarConstraints() {
-        view.addSubview(customNavigationBar)
         NSLayoutConstraint.activate([
             customNavigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             customNavigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -255,7 +246,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupErrorViewConstraints() {
-        view.addSubview(errorView)
         NSLayoutConstraint.activate([
             errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -265,7 +255,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupLoadingIndicatorConstraints() {
-        view.addSubview(loadingIndicator)
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)

@@ -13,6 +13,7 @@ protocol SearchBarDelegate: AnyObject {
 
 final class SearchBar: UIView {
     
+    // MARK: Components
     private let searchIcon: UIImageView = {
         let image = UIImageView()
         image.image = Constants.SearchIcon.image
@@ -71,6 +72,7 @@ final class SearchBar: UIView {
     }    
 }
 
+// MARK: - UITextFieldDelegate
 extension SearchBar: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.textFieldStartTyping()
