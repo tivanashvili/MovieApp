@@ -50,7 +50,7 @@ final class MovieDetailsViewController: UIViewController {
     
     private let favoriteButton: UIButton = {
         let button = UIButton()
-        button.setImage(Constants.FavoriteButton.image, for: .normal)
+        button.setImage(UIImage(named: Constants.FavoriteButton.image), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -133,7 +133,8 @@ final class MovieDetailsViewController: UIViewController {
     
     // MARK: Properties
     weak var delegate: MovieDetailsViewControllerDelegate?
-    
+    private var isFavorite = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -191,6 +192,7 @@ final class MovieDetailsViewController: UIViewController {
     
     private func setupFavoriteButtonConstraints() {
         view.addSubview(favoriteButton)
+        favoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         NSLayoutConstraint.activate([
             favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.FavoriteButton.trailingConstraint),
             favoriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.FavoriteButton.topConstraint),
@@ -272,6 +274,15 @@ final class MovieDetailsViewController: UIViewController {
         navController.modalPresentationStyle = .fullScreen
         self.present(navController, animated: true, completion: nil)
     }
+    
+    @objc private func toggleFavorite() {
+        isFavorite.toggle()
+        if isFavorite {
+            favoriteButton.setImage(UIImage(named: Constants.FavoriteButton.selectedImage), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage(named: Constants.FavoriteButton.image), for: .normal)
+        }
+    }
 }
 
 private extension MovieDetailsViewController {
@@ -307,7 +318,8 @@ private extension MovieDetailsViewController {
         }
         
         enum FavoriteButton {
-            static let image = UIImage(named: "detailsFavorite")
+            static let image = "detailsFavorite"
+            static let selectedImage = "selectedDetailsFavorite"
             static let trailingConstraint: CGFloat = -16
             static let topConstraint: CGFloat = 26
             static let height: CGFloat = 22
