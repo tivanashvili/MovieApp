@@ -74,6 +74,7 @@ final class MovieTrailerViewController: UIViewController {
     // MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setup()
         setupPlayer()
     }

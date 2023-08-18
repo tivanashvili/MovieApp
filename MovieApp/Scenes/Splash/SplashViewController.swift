@@ -18,6 +18,7 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setupImageConstraints()
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.AnimationTime.seconds) {
             self.navigateToMainScreen()
@@ -49,7 +50,7 @@ extension SplashViewController {
         }
         
         enum AnimationTime {
-            static let seconds: CGFloat = 1
+            static let seconds: CGFloat = 3
         }
     }
 }

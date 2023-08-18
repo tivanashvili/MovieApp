@@ -120,6 +120,7 @@ final class HomeViewController: UIViewController {
         customNavigationBar.setFavoritesButtonSelected(false)
         setupViews()
         addTapGestureRecognizer()
+        view.backgroundColor = .black
         //loadingIndicator.startAnimating()
         loadingIndicator.isHidden = true
     }

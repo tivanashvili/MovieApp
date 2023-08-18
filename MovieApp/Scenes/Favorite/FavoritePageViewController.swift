@@ -66,6 +66,7 @@ final class FavoritePageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setupTitleLabelConstraints()
         customNavigationBar.setFavoritesButtonSelected(true)
         setupCustomNavigationBarConstraints()

@@ -138,6 +138,7 @@ final class MovieDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        view.backgroundColor = .black
     }
     
     private func setupViews() {
