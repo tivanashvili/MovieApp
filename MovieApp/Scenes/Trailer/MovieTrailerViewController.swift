@@ -61,6 +61,16 @@ final class MovieTrailerViewController: UIViewController {
         return button
     }()
     
+    private let durationLabel: UILabel = {
+        let label = UILabel()
+        label.text = Constants.DurationLabel.text
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = Constants.DurationLabel.font
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: Init
     init(videoURL: URL) {
         self.videoURL = videoURL
@@ -88,6 +98,7 @@ final class MovieTrailerViewController: UIViewController {
         setupPlayPauseButtonConstraints()
         setupBackButtonConstraints()
         setupButtonActions()
+        setupDurationLabelConstraints()
     }
     
     private func setupButtonActions() {
@@ -123,6 +134,14 @@ final class MovieTrailerViewController: UIViewController {
             slider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Slider.leading),
             slider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Slider.trailing),
             slider.topAnchor.constraint(equalTo: videoPlayerView.bottomAnchor, constant: Constants.Slider.top),
+        ])
+    }
+    
+    private func setupDurationLabelConstraints() {
+        view.addSubview(durationLabel)
+        NSLayoutConstraint.activate([
+            durationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.DurationLabel.trailing),
+            durationLabel.topAnchor.constraint(equalTo: videoPlayerView.bottomAnchor, constant: Constants.DurationLabel.top)
         ])
     }
     
@@ -190,7 +209,12 @@ final class MovieTrailerViewController: UIViewController {
     }
     
     @objc private func sliderValueChanged() {
-        let time = CMTime(seconds: Double(slider.value) * (avPlayer.currentItem?.duration.seconds ?? Constants.Video.cmTime), preferredTimescale: Constants.Video.preferredTimescale)
+        let totalTime = avPlayer.currentItem?.duration ?? CMTime(seconds: Constants.Video.cmTime, preferredTimescale: Constants.Video.preferredTimescale)
+        let timeInSeconds = totalTime.seconds * Double(slider.value)
+        
+        updateDurationLabel(with: timeInSeconds)
+        
+        let time = CMTime(seconds: timeInSeconds, preferredTimescale: Constants.Video.preferredTimescale)
         seek(to: time)
     }
     
@@ -206,6 +230,16 @@ final class MovieTrailerViewController: UIViewController {
         let totalTime = avPlayer.currentItem?.duration ?? CMTime(seconds: Constants.Video.cmTime, preferredTimescale: Constants.Video.preferredTimescale)
         let progress = Float(time.seconds / totalTime.seconds)
         slider.value = progress
+        DispatchQueue.main.async {
+            self.updateDurationLabel(with: time.seconds)
+        }
+    }
+    
+    private func updateDurationLabel(with timeInSeconds: Double) {
+        let minutes = Int(timeInSeconds) / 60
+        let seconds = Int(timeInSeconds) % 60
+        let durationText = String(format: "%02d:%02d", minutes, seconds)
+        durationLabel.text = durationText
     }
 }
 
@@ -236,8 +270,15 @@ extension MovieTrailerViewController {
             static let thumbTintColor = UIColor(hex: "F5C518")
             static let minimumTrackImage = UIImage(named: "slider")
             static let leading: CGFloat = 16
-            static let trailing: CGFloat = -16
+            static let trailing: CGFloat = -60
             static let top: CGFloat = 60
+        }
+        
+        enum DurationLabel {
+            static let top: CGFloat = 66
+            static let trailing: CGFloat = -16
+            static let text = "00:00"
+            static let font = UIFont.systemFont(ofSize: 12)
         }
         
         enum PlayPauseButton {
