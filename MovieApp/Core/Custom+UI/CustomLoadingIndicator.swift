@@ -85,6 +85,10 @@ final class CustomLoadingIndicator: UIView {
     func startAnimating() {
         circleLayer.add(strokeAnimationGroup, forKey: nil)
     }
+    
+    func stopAnimating() {
+        circleLayer.removeAnimation(forKey: "")
+    }
 }
 
 extension CustomLoadingIndicator {

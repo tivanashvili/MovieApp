@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 final class MoviesCollectionViewCell: UICollectionViewCell {
     
@@ -104,7 +105,7 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
     private func setupMovieNameLabelConstraints() {
         contentView.addSubview(movieNameLabel)
         NSLayoutConstraint.activate([
-            movieNameLabel.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.MovieNameLabel.top),
+            movieNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: Constants.MovieNameLabel.top),
             movieNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.MovieNameLabel.leading),
             movieNameLabel.widthAnchor.constraint(equalToConstant: Constants.MovieNameLabel.width)
         ])
@@ -123,7 +124,7 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(favouriteButton)
         favouriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         NSLayoutConstraint.activate([
-            favouriteButton.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: Constants.FavoriteButton.top),
+            favouriteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: Constants.FavoriteButton.top),
             favouriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.FavoriteButton.trailing)
         ])
     }
@@ -147,10 +148,26 @@ final class MoviesCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with movie: Movie) {
-        moviePoster.image = UIImage(named: movie.poster)
-        movieNameLabel.text = movie.name
-        movieGenreLabel.text = movie.genre
-        movieYearLabel.text = String(movie.year)
+        if let posters = movie.images?.poster {
+               if let firstPoster = posters["1"] { // Check if the "1" key exists
+                   if let medium = firstPoster.medium, let filmImage = medium.film_image {
+                       if let imageURL = URL(string: filmImage) {
+                           moviePoster.sd_setImage(with: imageURL)
+                       }
+                   }
+               } else if let emptyPoster = movie.images?.emptyPoster, emptyPoster.isEmpty {
+                   moviePoster.image = UIImage(named: "noImage")
+                   
+               }
+           }
+        movieGenreLabel.text = "comedy"
+        movieGenreLabel.sizeToFit()
+        movieNameLabel.text = movie.film_name
+        if let releaseDate = movie.release_dates?.first, let formattedDate = releaseDate.release_date {
+               movieYearLabel.text = Date.formatCutomDate(from: formattedDate)
+           } else {
+               movieYearLabel.text = ""
+           }
     }
 }
 
@@ -166,12 +183,12 @@ extension MoviesCollectionViewCell {
         enum FavoriteButton {
             static let image = "Favorite"
             static let selectedImage = "selectedFavorite"
-            static let top: CGFloat = 4
+            static let top: CGFloat = -10
             static let trailing: CGFloat = -4
         }
         
         enum MovieNameLabel {
-            static let top: CGFloat = 4
+            static let top: CGFloat = -14
             static let leading: CGFloat = 6
             static let width: CGFloat = 128
         }

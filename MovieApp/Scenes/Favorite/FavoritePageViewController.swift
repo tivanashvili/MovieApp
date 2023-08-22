@@ -51,17 +51,17 @@ final class FavoritePageViewController: UIViewController {
     // MARK: Properties
     private var isFavoriteButtonSelected = false
     
-    private let movies: [Movie] = [
-        Movie(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
-        Movie(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
-        Movie(poster: "movie3", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+    private let movies: [Movies] = [
+        Movies(poster: "movie1", name: "The Baby Boss", genre: "d", year: 2017),
+        Movies(poster: "movie2", name: "The Baby Boss", genre: "ComedyttttttttttComedyttttttttttComedytttttttttt", year: 2016),
+        Movies(poster: "movie3", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
+        Movies(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
     ]
     
     override func viewDidLoad() {

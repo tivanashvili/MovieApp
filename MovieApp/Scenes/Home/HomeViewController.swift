@@ -82,34 +82,19 @@ final class HomeViewController: UIViewController {
         return indicator
     }()
     
+    private let viewModel = HomeViewModel()
+    
     // MARK: Properties
     private var isFilterSelected = false
     private var selectedIndexPath: IndexPath?
     private var filteredMovies: [Movie] = []
     
     private let categories: [GenreCategory] = [
-        GenreCategory(title: "Comedy"),
-        GenreCategory(title: "Drama,BossBossBossBossBossBossBossBossBossBossBossBoss"),
-        GenreCategory(title: "Thriller"),
-        GenreCategory(title: "Action"),
-        GenreCategory(title: "Drama"),
-        GenreCategory(title: "Thriller"),
-        GenreCategory(title: "Comedy"),
-        GenreCategory(title: "Thriller")
+        GenreCategory(title: "filmsNowSHowing"),
+        GenreCategory(title: "filmsComingSoon"),
     ]
     
-    private let movies: [Movie] = [
-        Movie(poster: "movie1", name: "The Baby BossBossBossBossBossBoss", genre: "Drama", year: 2017),
-        Movie(poster: "movie2", name: "The Baby Boss", genre: "Thriller", year: 2016),
-        Movie(poster: "movie3", name: "The Baby Boss", genre: "Action", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Thriller", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Thriller", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Action", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Action", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Drama", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-        Movie(poster: "movie4", name: "The Baby Boss", genre: "Comedy", year: 2017),
-    ]
+    private var movies: [Movie] = []
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -121,8 +106,8 @@ final class HomeViewController: UIViewController {
         setupViews()
         addTapGestureRecognizer()
         view.backgroundColor = .black
-        //loadingIndicator.startAnimating()
         loadingIndicator.isHidden = true
+        fetchMovies()
     }
     
     override func viewDidLayoutSubviews() {
@@ -136,6 +121,28 @@ final class HomeViewController: UIViewController {
     }
     
     // MARK: Actions
+    
+    private func fetchMovies() {
+        loadingIndicator.isHidden = false
+        loadingIndicator.startAnimating()
+
+//        viewModel.selectedCategory = selectedCategory
+
+        viewModel.fetchMovies { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.moviesCollectionView.reloadData()
+                self.loadingIndicator.isHidden = true
+//                self.loadingIndicator.stopAnimating()
+            case .failure:
+                self.loadingIndicator.isHidden = true
+                self.errorView.isHidden = false
+//                self.loadingIndicator.stopAnimating()
+            }
+        }
+    }
+    
     private func showFavoritePageViewController() {
         DispatchQueue.main.async {
             let favoriteVC = FavoritePageViewController()
@@ -302,9 +309,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             return categories.count
         } else if collectionView == moviesCollectionView {
             if isFilterSelected {
-                return filteredMovies.count
+                return viewModel.movies.count
             } else {
-                return movies.count
+                return viewModel.movies.count
             }
         }
         return 0
@@ -316,17 +323,20 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let genreCategory = categories[indexPath.row]
             movieCategoryCollectionViewCell.configure(with: genreCategory)
             return movieCategoryCollectionViewCell
-        } else if collectionView == self.moviesCollectionView {
-            let moviesCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier, for: indexPath) as! MoviesCollectionViewCell
+        } else if collectionView == moviesCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier, for: indexPath) as! MoviesCollectionViewCell
+
             let movie: Movie
             if isFilterSelected {
-                movie = filteredMovies[indexPath.row]
+                movie = viewModel.movies[indexPath.row]
             } else {
-                movie = movies[indexPath.row]
+                movie = viewModel.getMovie(at: indexPath.row) ?? Movie() // Modify this based on your ViewModel method
             }
-            moviesCollectionViewCell.configure(with: movie)
-            return moviesCollectionViewCell
+            cell.configure(with: movie)
+
+            return cell
         }
+        
         return UICollectionViewCell()
     }
     
@@ -351,9 +361,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 selectedIndexPath = indexPath
                 
                 let selectedCategory = categories[indexPath.row]
-                filteredMovies = movies.filter { movie in
-                    return movie.genre == selectedCategory.title
-                }
                 
                 moviesCollectionView.reloadData()
             }

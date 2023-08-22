@@ -144,7 +144,7 @@ final class FavoriteCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configure(with movie: Movie) {
+    func configure(with movie: Movies) {
         moviePoster.image = UIImage(named: movie.poster)
         movieNameLabel.text = movie.name
         movieGenreLabel.text = movie.genre
