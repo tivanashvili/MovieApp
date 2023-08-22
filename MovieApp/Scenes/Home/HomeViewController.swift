@@ -87,14 +87,14 @@ final class HomeViewController: UIViewController {
     // MARK: Properties
     private var isFilterSelected = false
     private var selectedIndexPath: IndexPath?
-    private var filteredMovies: [Movie] = []
     
     private let categories: [GenreCategory] = [
         GenreCategory(title: "filmsNowSHowing"),
         GenreCategory(title: "filmsComingSoon"),
     ]
     
-    private var movies: [Movie] = []
+    private var nowShowingMovies: [Movie] = []
+    private var comingSoonMovies: [Movie] = []
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -121,27 +121,49 @@ final class HomeViewController: UIViewController {
     }
     
     // MARK: Actions
-    
     private func fetchMovies() {
         loadingIndicator.isHidden = false
         loadingIndicator.startAnimating()
 
-//        viewModel.selectedCategory = selectedCategory
-
-        viewModel.fetchMovies { [weak self] result in
+        viewModel.fetchNowShowingMovies { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
-                self.moviesCollectionView.reloadData()
-                self.loadingIndicator.isHidden = true
-//                self.loadingIndicator.stopAnimating()
+            case .success(let movies):
+                self.nowShowingMovies = movies
+                self.reloadDataAndHideLoadingIndicator()
             case .failure:
-                self.loadingIndicator.isHidden = true
-                self.errorView.isHidden = false
-//                self.loadingIndicator.stopAnimating()
+                self.showErrorViewAndHideLoadingIndicator()
+            }
+        }
+
+        viewModel.fetchComingSoonMovies { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let movies):
+                self.comingSoonMovies = movies
+                self.reloadDataAndHideLoadingIndicator()
+            case .failure:
+                self.showErrorViewAndHideLoadingIndicator()
             }
         }
     }
+
+    private func reloadDataAndHideLoadingIndicator() {
+        if !nowShowingMovies.isEmpty && !comingSoonMovies.isEmpty {
+            moviesCollectionView.reloadData()
+            loadingIndicator.isHidden = true
+        }
+    }
+
+    private func showErrorViewAndHideLoadingIndicator() {
+        loadingIndicator.isHidden = true
+        errorView.isHidden = false
+    }
+
+    private func currentMoviesToDisplay() -> [Movie] {
+        return nowShowingMovies + comingSoonMovies
+    }
+
     
     private func showFavoritePageViewController() {
         DispatchQueue.main.async {
@@ -308,11 +330,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == movieCategoryCollectionView {
             return categories.count
         } else if collectionView == moviesCollectionView {
-            if isFilterSelected {
-                return viewModel.movies.count
-            } else {
-                return viewModel.movies.count
-            }
+            return viewModel.getMoviesCount()
         }
         return 0
     }
@@ -327,11 +345,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.MoviesCollectionView.reuseIdentifier, for: indexPath) as! MoviesCollectionViewCell
 
             let movie: Movie
-            if isFilterSelected {
-                movie = viewModel.movies[indexPath.row]
-            } else {
-                movie = viewModel.getMovie(at: indexPath.row) ?? Movie() // Modify this based on your ViewModel method
-            }
+            movie = currentMoviesToDisplay()[indexPath.row]
+
             cell.configure(with: movie)
 
             return cell
@@ -349,7 +364,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             if indexPath == selectedIndexPath {
                 cell.isSelectedCell = false
                 selectedIndexPath = nil
-                filteredMovies = movies
                 
                 moviesCollectionView.reloadData()
             } else {

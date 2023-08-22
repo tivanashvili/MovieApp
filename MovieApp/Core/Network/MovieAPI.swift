@@ -16,15 +16,16 @@ enum MovieAPIError: Error {
 
 class MovieAPI {
 
-    private let urlString = "https://api-gate2.movieglu.com/filmsNowShowing/?n=10"
+    private let baseURL = "https://api-gate2.movieglu.com"
+    private let apiKey = "BUIAmB47Uq8cT3skzP5i98vXBRBPPv9W8CTEFFVA"
 
-    private func createURLRequest() -> URLRequest? {
-        guard let url = URL(string: urlString) else { return nil }
+    private func createURLRequest(endpoint: String) -> URLRequest? {
+        guard let url = URL(string: baseURL + endpoint) else { return nil }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("EVEN_0", forHTTPHeaderField: "client")
-        request.setValue("BUIAmB47Uq8cT3skzP5i98vXBRBPPv9W8CTEFFVA", forHTTPHeaderField: "x-api-key")
+        request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
         request.setValue("Basic RVZFTl8wX1hYOkxPaGZMUFB2ZjlUaw==", forHTTPHeaderField: "authorization")
         request.setValue("XX", forHTTPHeaderField: "territory")
         request.setValue("v200", forHTTPHeaderField: "api-version")
@@ -37,8 +38,8 @@ class MovieAPI {
         return request
     }
 
-    func fetchMovies(completion: @escaping (Result<[Movie], MovieAPIError>) -> Void) {
-        guard let request = createURLRequest() else {
+    func fetchMovies(from endpoint: String, completion: @escaping (Result<[Movie], MovieAPIError>) -> Void) {
+        guard let request = createURLRequest(endpoint: endpoint) else {
             completion(.failure(.invalidURL))
             return
         }

@@ -11,21 +11,20 @@ struct Movie: Codable {
     var images: Images?
     var release_dates: [ReleaseDate]?
     var category: String?
+    var synopsis_long: String?
+    var film_trailer: URL?
 }
 
 struct Images: Codable {
-    var poster: [String: Poster]? // Use a dictionary to handle the "1" key
-    var emptyPoster: [String]? // Add a property for the empty case
-    
-    // Custom decoding logic to handle both cases
+    var poster: [String: Poster]?
+    var emptyPoster: [String]?
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            // Try to decode as a dictionary
             poster = try container.decodeIfPresent([String: Poster].self, forKey: .poster)
             emptyPoster = nil
         } catch {
-            // If decoding as a dictionary fails, try to decode as an empty array
             poster = nil
             emptyPoster = try container.decodeIfPresent([String].self, forKey: .poster)
         }
